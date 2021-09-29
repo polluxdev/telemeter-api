@@ -1,6 +1,34 @@
+const fs = require('fs')
+const path = require('path')
 const express = require('express')
-const app = express()
+const morgan = require('morgan')
 const cors = require('cors')
+const hpp = require('hpp')
+const xss = require('xss-clean')
+const helmet = require('helmet')
+
+const config = require('../../config')
+const routes = require('./routes')
+
+const app = express()
+const port = config.PORT || 3000;
+const apiVersion = config.API_VERSION;
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, '../../', 'logs', 'access.log'),
+  { flags: 'a' }
+)
+
+app.use(morgan('combined', { stream: accessLogStream }))
+if (config.NODE_ENV === 'development') {
+  app.use(morgan('dev'))
+}
+
+app.use(helmet())
+
+app.use(xss())
+
+app.use(hpp())
 
 app.use(
   cors({
@@ -11,6 +39,9 @@ app.use(
 
 app.options('*', cors())
 
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
 app.get('/', (req, res) =>
   res.status(200).json({
     success: true,
@@ -18,8 +49,29 @@ app.get('/', (req, res) =>
   })
 )
 
-const PORT = process.env.PORT || 3000
+app.use(apiVersion, routes)
 
-app.listen(PORT, () => {
-  console.log(`Listening on PORT: ${PORT}`)
+app.use((err, req, res, next) => {
+  if (err) {
+    console.error(err.message)
+    if (!err.statusCode) {
+      err.statusCode = 500
+    }
+    return res.status(err.statusCode).send({
+      statusCode: err.statusCode,
+      message: err.message
+    })
+  }
+
+  next()
+})
+
+app.use(function (req, res) {
+  res.status(404).json({
+    status: 'Page does not exist'
+  })
+})
+
+app.listen(port, () => {
+  console.log(`Listening on PORT: ${port}`)
 })
