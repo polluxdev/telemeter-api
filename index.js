@@ -7,7 +7,7 @@ const hpp = require('hpp')
 const xss = require('xss-clean')
 const helmet = require('helmet')
 
-const config = require('../../config')
+const config = require('./config')
 const routes = require('./routes')
 
 const app = express()
@@ -15,7 +15,7 @@ const port = config.PORT || 3000;
 const apiVersion = config.API_VERSION;
 
 const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, '../../', 'logs', 'access.log'),
+  path.join(__dirname, 'logs', 'access.log'),
   { flags: 'a' }
 )
 
@@ -53,7 +53,7 @@ app.use(apiVersion, routes)
 
 app.use((err, req, res, next) => {
   if (err) {
-    console.error(err.message)
+    console.error(err)
     if (!err.statusCode) {
       err.statusCode = 500
     }
