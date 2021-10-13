@@ -11,7 +11,8 @@ const cookieParser = require('cookie-parser')
 
 const config = require('./config')
 const routes = require('./routes')
-const { setLocale } = require('i18n')
+const globalErrorHandler = require('./utils/globalError')
+const AppError = require('./utils/appError')
 
 const app = express()
 const port = config.PORT || 3000
@@ -41,9 +42,7 @@ if (config.NODE_ENV === 'development') {
 }
 
 app.use(helmet())
-
 app.use(xss())
-
 app.use(hpp())
 
 app.use(
@@ -60,7 +59,6 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use((req, res, next) => {
-  console.log(req.cookies.lang);
   if (req.cookies.lang) {
     i18n.setLocale(req.cookies.lang)
   } else {
@@ -71,9 +69,11 @@ app.use((req, res, next) => {
 })
 
 app.post('/switch', (req, res, next) => {
-  res.cookie('lang', req.query.lang, { maxAge: 90000, httpOnly: true })
+  i18n.setLocale(req.query.lang)
+  res.cookie('lang', req.query.lang, { maxAge: 60000, httpOnly: true })
   res.status(200).json({
-    status: 'success'
+    status: 'success',
+    message: i18n.__('general.switch_locale_message')
   })
 })
 
@@ -86,26 +86,15 @@ app.get('/', (req, res) => {
 
 app.use(apiVersion, routes)
 
-app.use((err, req, res, next) => {
-  if (err) {
-    console.error(err)
-    if (!err.statusCode) {
-      err.statusCode = 500
-    }
-    return res.status(err.statusCode).send({
-      statusCode: err.statusCode,
-      message: err.message
-    })
-  }
-
-  next()
+app.all('*', (req, res, next) => {
+  const error = new AppError(
+    i18n.__('error.url_not_found', req.originalUrl),
+    404
+  )
+  next(error)
 })
 
-app.use(function (req, res) {
-  res.status(404).json({
-    status: 'Page does not exist'
-  })
-})
+app.use(globalErrorHandler)
 
 app.listen(port, () => {
   console.log(`Listening on PORT: ${port}`)

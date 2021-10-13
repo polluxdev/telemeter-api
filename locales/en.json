@@ -1,3 +1,10 @@
 {
-    "index": "Hello, Welcome!"
+    "index": "Hello, Welcome!",
+    "error": {
+        "url_not_found": "Can't find %s on this server!",
+        "user_already_exists": "Email has already registered"
+    },
+    "general": {
+        "switch_locale_message": "Language has been set"
+    }
 }

@@ -1,3 +1,10 @@
 {
-    "index": "안녕하십니까 환영합니다!"
+    "index": "Halo, Selamat Datang!",
+    "error": {
+        "url_not_found": "Tidak dapat menemukan %s pada server!",
+        "user_already_exists": "Email sudah terdaftar"
+    },
+    "general": {
+        "switch_locale_message": "Bahasa telah diatur"
+    }
 }
