@@ -5,13 +5,14 @@ const morgan = require('morgan')
 const cors = require('cors')
 const hpp = require('hpp')
 const xss = require('xss-clean')
+const mongoSanitize = require('express-mongo-sanitize')
+const rateLimit = require('express-rate-limit')
 const helmet = require('helmet')
 const i18n = require('i18n')
 const cookieParser = require('cookie-parser')
 
 const config = require('./config')
 const routes = require('./routes')
-const globalErrorHandler = require('./utils/globalError')
 const AppError = require('./utils/appError')
 
 const app = express()
@@ -36,6 +37,16 @@ i18n.configure({
 
 app.use(i18n.init)
 
+const limiter = rateLimit({
+  max: config.MAX_RATE_LIMIT || 1000,
+  windowMs: config.RESET_RATE_INTERVAL || 60 * 60 * 1000,
+  message: i18n.__('general.too_many_request')
+})
+
+app.use(apiVersion, limiter)
+
+app.use('/public/images', express.static(path.join(__dirname, 'images')))
+
 app.use(morgan('combined', { stream: accessLogStream }))
 if (config.NODE_ENV === 'development') {
   app.use(morgan('dev'))
@@ -57,6 +68,7 @@ app.options('*', cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
+app.use(mongoSanitize())
 
 app.use((req, res, next) => {
   if (req.cookies.lang) {
@@ -94,8 +106,43 @@ app.all('*', (req, res, next) => {
   next(error)
 })
 
-app.use(globalErrorHandler)
+app.use((err, req, res, next) => {
+  if (err) {
+    console.error(err)
+    if (!err.statusCode) {
+      err.statusCode = 500
+    }
+    
+    return res.status(err.statusCode).json({
+      success: false,
+      message: err.message
+    })
+  }
 
-app.listen(port, () => {
-  console.log(`Listening on PORT: ${port}`)
+  res.status(500).json({
+    success: false,
+    message: 'Something went wrong!'
+  })
+})
+
+const server = app.listen(port, () => {
+  console.log(i18n.__('general.server_running', port))
+})
+
+process.on(i18n.__('error.server.unhandle_rejection_name'), (error) => {
+  console.log(i18n.__('error.server.unhandle_rejection_message'))
+  console.log(error)
+
+  server.close(() => {
+    process.exit(1)
+  })
+})
+
+process.on(i18n.__('error.server.uncaught_exception_name'), (error) => {
+  console.log(i18n.__('error.server.uncaught_exception_message'))
+  console.log(error.name, error.message)
+
+  server.close(() => {
+    process.exit(1)
+  })
 })

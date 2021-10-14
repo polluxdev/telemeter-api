@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const mongoose = require('../config/connection')
+const mongoose = require('../connection')
 
 const Schema = mongoose.Schema
 
@@ -18,6 +18,20 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 )
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next()
+
+  this.password = await bcrypt.hash(this.password, 12)
+
+  next()
+})
+
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password')) return next()
+
+  next()
+})
 
 userSchema.methods.correctPassword = async function (
   inputPassword,

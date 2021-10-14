@@ -5,6 +5,8 @@ module.exports = {
   DOMAIN_APP: process.env.DOMAIN_APP,
   API_VERSION: process.env.API_VERSION,
   PORT: process.env.PORT,
+  MAX_RATE_LIMIT: process.env.MAX_RATE_LIMIT,
+  RESET_RATE_INTERVAL: process.env.RESET_RATE_INTERVAL,
   mongo: {
     MONGO_LOCAL_URI: process.env.MONGO_LOCAL_URI,
     MONGO_DOCKER_URI: process.env.MONGO_DOCKER_URI,

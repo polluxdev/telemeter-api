@@ -1,28 +1,27 @@
-const User = require('../../models/user')
+const User = require('../../database/models/user')
 const serialize = require('./serializer')
-const bcrypt = require('bcrypt')
+const AppError = require('../../utils/appError')
 
 const signup = async (reqBody) => {
-  const hashedPassword = await bcrypt.hash(reqBody.password, 12)
   const newUser = {
     email: reqBody.email,
-    password: hashedPassword
+    password: reqBody.password
   }
 
   return await User.create(newUser).then(serialize)
 }
 
 const login = async (reqBody) => {
-  const loginData = { ...reqBody }
+  const { email, password } = reqBody
 
-  return await User.findOne({ ['username']: loginData.username })
+  return await User.findOne({ ['email']: email })
     .select('+password')
     .then(async (user) => {
       if (
         !user ||
-        !(await user.correctPassword(loginData.password, user.password))
+        !(await user.correctPassword(password, user.password))
       ) {
-        throw new Error('Incorrect email or password!')
+        throw new AppError('Incorrect email or password!', 401)
       }
 
       return user
@@ -30,7 +29,12 @@ const login = async (reqBody) => {
     .then(serialize)
 }
 
+const checkUser = async (reqBody) => {
+  return await User.findOne({ email: reqBody.email }).exec()
+}
+
 module.exports = {
   signup,
-  login
+  login,
+  checkUser
 }

@@ -1,10 +1,19 @@
 {
-    "index": "Hello, Welcome!",
-    "error": {
-        "url_not_found": "Can't find %s on this server!",
-        "user_already_exists": "Email has already registered"
-    },
-    "general": {
-        "switch_locale_message": "Language has been set"
-    }
+	"index": "Hello, Welcome!",
+	"error": {
+		"server": {
+			"unhandle_rejection_name": "unhandledRejection",
+			"unhandle_rejection_message": "UNHANDLED REJECTION!",
+			"uncaught_exception_name": "uncaughtException",
+			"uncaught_exception_message": "UNCAUGHT EXCEPTION!"
+		},
+		"url_not_found": "Can't find %s on this server!",
+		"user_already_exists": "Email has already registered"
+	},
+	"general": {
+		"switch_locale_message": "Language has been set",
+		"server_running": "Listening on PORT: %d",
+		"too_many_request": "Too many request from this IP! Please try again in an hour."
+	},
+	"": ""
 }

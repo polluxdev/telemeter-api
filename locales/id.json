@@ -1,10 +1,18 @@
 {
     "index": "Halo, Selamat Datang!",
     "error": {
+        "server": {
+            "unhandle_rejection_name": "unhandledRejection",
+            "unhandle_rejection_message": "UNHANDLED REJECTION!",
+            "uncaught_exception_name": "uncaughtException",
+            "uncaught_exception_message": "UNCAUGHT EXCEPTION!"
+        },
         "url_not_found": "Tidak dapat menemukan %s pada server!",
         "user_already_exists": "Email sudah terdaftar"
     },
     "general": {
-        "switch_locale_message": "Bahasa telah diatur"
+        "switch_locale_message": "Bahasa telah diatur",
+        "server_running": "Listening on PORT: %d",
+        "too_many_request": "Too many request from this IP! Please try again in an hour."
     }
 }

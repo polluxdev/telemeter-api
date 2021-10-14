@@ -6,6 +6,6 @@ const { userValidationRules, validate } = require('../validator/user')
 const router = express.Router()
 
 router.post('/signup', userValidationRules(), validate, authController.signup)
-router.post('/login', authController.login)
+router.post('/login', userValidationRules(), validate, authController.login)
 
 module.exports = router
