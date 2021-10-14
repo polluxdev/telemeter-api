@@ -19,5 +19,10 @@ module.exports = {
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
     JWT_EXPIRED_TIMEOUT: process.env.JWT_EXPIRED_TIMEOUT,
     JWT_COOKIE_EXPIRED_TIMEOUT: process.env.JWT_COOKIE_EXPIRED_TIMEOUT
+  },
+  antares: {
+    ANTARES_ACCESS_KEY: process.env.ANTARES_ACCESS_KEY,
+    ANTARES_APPLICATION_NAME: process.env.ANTARES_APPLICATION_NAME,
+    ANTARES_URL: process.env.ANTARES_URL
   }
 }

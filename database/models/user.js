@@ -14,6 +14,15 @@ const userSchema = new Schema(
       required: true,
       minlength: 8,
       select: false
+    },
+    deviceID: {
+      type: String,
+      required: true
+    },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false
     }
   },
   { timestamps: true }

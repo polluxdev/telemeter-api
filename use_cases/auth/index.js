@@ -5,7 +5,8 @@ const AppError = require('../../utils/appError')
 const signup = async (reqBody) => {
   const newUser = {
     email: reqBody.email,
-    password: reqBody.password
+    password: reqBody.password,
+    deviceID: reqBody.deviceID
   }
 
   return await User.create(newUser).then(serialize)
@@ -17,10 +18,7 @@ const login = async (reqBody) => {
   return await User.findOne({ ['email']: email })
     .select('+password')
     .then(async (user) => {
-      if (
-        !user ||
-        !(await user.correctPassword(password, user.password))
-      ) {
+      if (!user || !(await user.correctPassword(password, user.password))) {
         throw new AppError('Incorrect email or password!', 401)
       }
 

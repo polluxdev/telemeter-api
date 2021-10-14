@@ -4,6 +4,7 @@
   "description": "water meter API",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.23.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -15,10 +16,10 @@
     "helmet": "^4.6.0",
     "hpp": "^0.2.3",
     "i18n": "^0.13.3",
-    "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.8",
     "morgan": "^1.10.0",
+    "uuid": "^8.3.2",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
