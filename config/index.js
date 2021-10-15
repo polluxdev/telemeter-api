@@ -2,6 +2,7 @@ require('dotenv').config()
 
 module.exports = {
   NODE_ENV: process.env.NODE_ENV,
+  APP_NAME: process.env.APP_NAME,
   DOMAIN_APP: process.env.DOMAIN_APP,
   API_VERSION: process.env.API_VERSION,
   PORT: process.env.PORT,
@@ -24,5 +25,11 @@ module.exports = {
     ANTARES_ACCESS_KEY: process.env.ANTARES_ACCESS_KEY,
     ANTARES_APPLICATION_NAME: process.env.ANTARES_APPLICATION_NAME,
     ANTARES_URL: process.env.ANTARES_URL
+  },
+  mail: {
+    MAIL_HOST: process.env.MAIL_HOST,
+    MAIL_PORT: process.env.MAIL_PORT,
+    MAIL_USER: process.env.MAIL_USER,
+    MAIL_PASSWORD: process.env.MAIL_PASSWORD
   }
 }
