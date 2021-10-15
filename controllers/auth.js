@@ -1,9 +1,8 @@
 const i18n = require('i18n')
-const { v4: uuidv4 } = require('uuid')
 
-const axios = require('../services/antaresService')
 const catchAsync = require('../utils/catchAsync')
 const authDb = require('../use_cases/auth')
+const deviceDb = require('../use_cases/device')
 
 exports.signup = catchAsync(async (req, res, next) => {
   const reqBody = req.body
@@ -15,21 +14,12 @@ exports.signup = catchAsync(async (req, res, next) => {
     })
   }
 
-  const deviceID = uuidv4()
-  const device = await axios.post('', {
-    'm2m:cnt': {
-      'xmlns:m2m': 'http://www.onem2m.org/xml/protocols',
-      rn: deviceID
-    }
-  })
-
-  reqBody.deviceID = deviceID
+  reqBody.device = await deviceDb.createDevice()
   const data = await authDb.signup(reqBody)
 
   const response = {
     success: true,
-    data,
-    device: device.data
+    data
   }
 
   res.status(201).json(response)

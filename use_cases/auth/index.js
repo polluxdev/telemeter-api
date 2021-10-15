@@ -6,7 +6,7 @@ const signup = async (reqBody) => {
   const newUser = {
     email: reqBody.email,
     password: reqBody.password,
-    deviceID: reqBody.deviceID
+    device: reqBody.device
   }
 
   return await User.create(newUser).then(serialize)

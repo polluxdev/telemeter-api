@@ -15,9 +15,8 @@ const userSchema = new Schema(
       minlength: 8,
       select: false
     },
-    deviceID: {
-      type: String,
-      required: true
+    device: {
+      id: String
     },
     active: {
       type: Boolean,
