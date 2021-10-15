@@ -11,11 +11,9 @@ const options = {
   useNewUrlParser: true
 }
 
-const env = process.env.NODE_ENV
-
-if (env === 'production') {
+if (config.NODE_ENV === 'development') {
   mongoose
-    .connect(atlasUri, options)
+    .connect(localUri, options)
     .then(() => {
       console.log('CONNECTED TO MONGODB!')
     })
@@ -24,7 +22,7 @@ if (env === 'production') {
     })
 } else {
   mongoose
-    .connect(localUri, options)
+    .connect(atlasUri, options)
     .then(() => {
       console.log('CONNECTED TO MONGODB!')
     })
