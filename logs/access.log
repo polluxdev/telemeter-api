@@ -12,3 +12,5 @@
 ::1 - - [15/Oct/2021:06:59:30 +0000] "POST /api/v1/signup HTTP/1.1" 201 256 "-" "PostmanRuntime/7.28.4"
 ::1 - - [15/Oct/2021:07:00:11 +0000] "POST /api/v1/signup HTTP/1.1" 201 256 "-" "PostmanRuntime/7.28.4"
 ::1 - - [15/Oct/2021:07:00:56 +0000] "POST /api/v1/signup HTTP/1.1" 201 256 "-" "PostmanRuntime/7.28.4"
+::1 - - [15/Oct/2021:08:28:27 +0000] "POST /api/v1/users HTTP/1.1" 200 102 "-" "PostmanRuntime/7.28.4"
+::1 - - [15/Oct/2021:08:28:53 +0000] "POST /api/v1/users HTTP/1.1" 200 157 "-" "PostmanRuntime/7.28.4"

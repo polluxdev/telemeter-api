@@ -16,6 +16,11 @@ const createDevice = async () => {
     .then(serialize)
 }
 
+const getDevice = async (deviceID) => {
+  return await axios.get(`/${deviceID}`).then(serialize)
+}
+
 module.exports = {
-  createDevice
+  createDevice,
+  getDevice
 }
