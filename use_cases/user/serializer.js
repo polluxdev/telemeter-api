@@ -1,4 +1,4 @@
-const { generateToken } = require('../../services/authService')
+const { generateToken } = require('../../services/auth')
 
 const _serializeSingle = (user) => {
   return {

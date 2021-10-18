@@ -1,5 +1,5 @@
 const uuid = require('../../services/uuid')
-const axios = require('../../services/antaresService')
+const axios = require('../../services/antares')
 
 const serialize = require('./serializer')
 
@@ -20,7 +20,12 @@ const getDevice = async (deviceID) => {
   return await axios.get(`/${deviceID}`).then(serialize)
 }
 
+const deleteDevice = async (deviceID) => {
+  return await axios.delete(`/${deviceID}`)
+}
+
 module.exports = {
   createDevice,
-  getDevice
+  getDevice,
+  deleteDevice
 }

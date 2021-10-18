@@ -15,13 +15,16 @@ const userSchema = new Schema(
       minlength: 8,
       select: false
     },
+    name: {
+      type: String,
+      minlength: 2
+    },
     device: {
       id: String
     },
     active: {
       type: Boolean,
-      default: true,
-      select: false
+      default: true
     }
   },
   { timestamps: true }

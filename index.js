@@ -38,7 +38,7 @@ i18n.configure({
 app.use(i18n.init)
 
 const limiter = rateLimit({
-  max: config.MAX_RATE_LIMIT || 1000,
+  max: config.MAX_RATE_LIMIT || 30000,
   windowMs: config.RESET_RATE_INTERVAL || 60 * 60 * 1000,
   message: i18n.__('general.too_many_request')
 })

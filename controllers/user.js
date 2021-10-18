@@ -15,3 +15,38 @@ exports.getUsers = catchAsync(async (req, res, next) => {
 
   res.status(200).json(response)
 })
+
+exports.getUser = catchAsync(async (req, res, next) => {
+  const data = await userDb.getUser(req.params.id)
+
+  const response = {
+    success: true,
+    data
+  }
+
+  res.status(200).json(response)
+})
+
+exports.updateUser = catchAsync(async (req, res, next) => {
+  const data = await userDb.updateUser(req.params.id, req.body)
+
+  const response = {
+    success: true,
+    data
+  }
+
+  res.status(201).json(response)
+})
+
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  await userDb.deleteUser(req.params.id).then(async (data) => {
+    return await deviceDb.deleteDevice(data.device.id)
+  })
+
+  const response = {
+    success: true,
+    message: 'User deleted successfully'
+  }
+
+  res.status(200).json(response)
+})
