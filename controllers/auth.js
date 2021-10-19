@@ -6,6 +6,7 @@ const catchAsync = require('../utils/catchAsync')
 const authDb = require('../use_cases/auth')
 const deviceDb = require('../use_cases/device')
 const transporter = require('../services/mail')
+const authService = require('../services/auth')
 
 exports.signup = catchAsync(async (req, res, next) => {
   const reqBody = req.body
@@ -23,6 +24,9 @@ exports.signup = catchAsync(async (req, res, next) => {
     data
   }
 
+  const cookieOption = await authService.createCookie()
+
+  res.cookie('jwt', data.token, cookieOption)
   res.status(201).json(response)
 })
 
@@ -34,6 +38,9 @@ exports.login = catchAsync(async (req, res, next) => {
     data
   }
 
+  const cookieOption = await authService.createCookie()
+
+  res.cookie('jwt', data.token, cookieOption)
   res.status(200).json(response)
 })
 

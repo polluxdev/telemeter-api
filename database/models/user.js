@@ -22,6 +22,10 @@ const userSchema = new Schema(
     device: {
       id: String
     },
+    role: {
+      type: String,
+      default: 'user'
+    },
     active: {
       type: Boolean,
       default: true

@@ -1,9 +1,9 @@
-const { generateToken } = require('../../services/auth')
-
 const _serializeSingle = (user) => {
   return {
     id: user._id,
     email: user.email,
+    role: user.role,
+    active: user.active,
     device: user.device
   }
 }

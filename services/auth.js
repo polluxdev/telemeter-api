@@ -7,6 +7,19 @@ const generateToken = (userId, email) => {
   })
 }
 
+const createCookie = () => {
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + config.jwt.JWT_COOKIE_EXPIRED_TIMEOUT * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true
+  }
+  if (config.NODE_ENV === 'production') cookieOptions.secure = true
+
+  return cookieOptions
+}
+
 module.exports = {
-  generateToken
+  generateToken,
+  createCookie
 }
