@@ -7,7 +7,7 @@ const instance = axios.create({
   timeout: 1000,
   headers: {
     'X-M2M-Origin': config.antares.ANTARES_ACCESS_KEY,
-    'Content-Type': 'application/json;ty=3',
+    'Content-Type': 'application/json',
     Accept: 'application/json'
   }
 })
