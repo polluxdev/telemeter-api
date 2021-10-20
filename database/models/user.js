@@ -20,7 +20,8 @@ const userSchema = new Schema(
       minlength: 2
     },
     device: {
-      id: String
+      type: mongoose.Schema.ObjectId,
+      ref: 'Device'
     },
     role: {
       type: String,

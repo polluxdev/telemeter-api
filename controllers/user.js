@@ -39,8 +39,8 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 })
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
-  await userDb.deleteUser(req.params.id).then(async (data) => {
-    return await deviceDb.deleteDevice(data.device.id)
+  await userDb.deleteUser(req.params.id).then(async (user) => {
+    return await deviceDb.deleteDevice(user.device)
   })
 
   const response = {

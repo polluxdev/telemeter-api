@@ -5,8 +5,7 @@ const AppError = require('../../utils/appError')
 const signup = async (reqBody) => {
   const newUser = {
     email: reqBody.email,
-    password: reqBody.password,
-    device: reqBody.device
+    password: reqBody.password
   }
 
   return await User.create(newUser).then(serialize)

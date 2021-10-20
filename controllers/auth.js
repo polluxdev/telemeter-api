@@ -3,8 +3,11 @@ const i18n = require('i18n')
 const AppError = require('../utils/appError')
 const config = require('../config')
 const catchAsync = require('../utils/catchAsync')
+
 const authDb = require('../use_cases/auth')
 const deviceDb = require('../use_cases/device')
+const userDb = require('../use_cases/user')
+
 const transporter = require('../services/mail')
 const authService = require('../services/auth')
 
@@ -16,8 +19,17 @@ exports.signup = catchAsync(async (req, res, next) => {
     throw new AppError('User already exists', 422)
   }
 
-  reqBody.device = await deviceDb.createDevice()
-  const data = await authDb.signup(reqBody)
+  const data = await authDb
+    .signup(reqBody)
+    .then(async (user) => {
+      const device = await deviceDb.createDevice()
+      await userDb.updateUser(user.id, { device: device.id })
+      return user
+    })
+    .catch((err) => {
+      console.log(err)
+      throw new AppError('Create user failed', 422)
+    })
 
   const response = {
     success: true,

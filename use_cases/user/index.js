@@ -10,7 +10,6 @@ const getUser = async (userID) => {
 }
 
 const updateUser = async (userID, reqBody) => {
-  console.log(reqBody)
   return await User.findByIdAndUpdate(userID, reqBody, {
     new: true,
     runValidators: true

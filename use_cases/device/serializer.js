@@ -1,7 +1,9 @@
 const _serializeSingle = (device) => {
-  const data = device.data['m2m:cnt']
   return {
-    id: data.rn
+    id: device.id,
+    name: device.name,
+    qty: device.qty,
+    active: device.active
   }
 }
 
