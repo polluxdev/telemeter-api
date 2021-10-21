@@ -1,5 +1,6 @@
 const i18n = require('i18n')
 
+const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
 const userDb = require('../use_cases/user')
 const deviceDb = require('../use_cases/device')
@@ -39,9 +40,15 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 })
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
-  await userDb.deleteUser(req.params.id).then(async (user) => {
-    return await deviceDb.deleteDevice(user.device)
-  })
+  await userDb
+    .deleteUser(req.params.id)
+    .then(async (user) => {
+      return await deviceDb.deleteDevice(user.device)
+    })
+    .catch((err) => {
+      console.log(err)
+      throw new AppError('Delete user failed', 422)
+    })
 
   const response = {
     success: true,
