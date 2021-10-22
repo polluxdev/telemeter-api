@@ -2,9 +2,11 @@ const _serializeSingle = (user) => {
   return {
     id: user._id,
     email: user.email,
+    name: user.name,
+    phoneNumber: user.phoneNumber,
+    device: user.device,
     role: user.role,
-    active: user.active,
-    device: user.device
+    active: user.active
   }
 }
 

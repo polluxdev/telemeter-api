@@ -5,10 +5,10 @@ const AppError = require('../../utils/appError')
 const signup = async (reqBody) => {
   const newUser = {
     email: reqBody.email,
-    password: reqBody.password
+    confirmationCode: reqBody.confirmationCode
   }
 
-  return await User.create(newUser).then(serialize)
+  return await User.create(newUser)
 }
 
 const login = async (reqBody) => {
@@ -26,8 +26,8 @@ const login = async (reqBody) => {
     .then(serialize)
 }
 
-const checkUser = async (reqBody) => {
-  return await User.findOne({ email: reqBody.email }).exec()
+const checkUser = async (key, value) => {
+  return await User.findOne({ [key]: value }).exec()
 }
 
 module.exports = {

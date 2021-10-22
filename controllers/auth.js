@@ -1,44 +1,38 @@
-const i18n = require('i18n')
+const crypto = require('crypto')
 
 const AppError = require('../utils/appError')
 const config = require('../config')
 const catchAsync = require('../utils/catchAsync')
 
 const authDb = require('../use_cases/auth')
-const deviceDb = require('../use_cases/device')
 const userDb = require('../use_cases/user')
 
-const transporter = require('../services/mail')
+const email = require('../services/mail')
 const authService = require('../services/auth')
 
 exports.signup = catchAsync(async (req, res, next) => {
   const reqBody = req.body
 
-  const user = await authDb.checkUser(reqBody)
+  const user = await authDb.checkUser('email', reqBody.email)
   if (user) {
     throw new AppError('User already exists', 422)
   }
 
-  const data = await authDb
-    .signup(reqBody)
-    .then(async (user) => {
-      const device = await deviceDb.createDevice()
-      await userDb.updateUser(user.id, { device: device.id })
-      return user
-    })
-    .catch((err) => {
-      console.log(err)
-      throw new AppError('Create user failed', 422)
-    })
+  reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
+  await authDb.signup(reqBody).catch((err) => {
+    console.log(err)
+    throw new AppError('Sign up failed', 502)
+  })
+  await email.setEmailVerification(reqBody).catch((err) => {
+    console.log(err)
+    throw new AppError('Send email has failed.', 502)
+  })
 
   const response = {
     success: true,
-    data
+    message: 'Email has been set. Please check your email'
   }
 
-  const cookieOption = await authService.createCookie()
-
-  res.cookie('jwt', data.token, cookieOption)
   res.status(201).json(response)
 })
 
@@ -56,62 +50,81 @@ exports.login = catchAsync(async (req, res, next) => {
   res.status(200).json(response)
 })
 
-exports.sendVerification = catchAsync(async (req, res, next) => {
+exports.register = catchAsync(async (req, res, next) => {
   const reqBody = req.body
 
-  const user = await authDb.checkUser(reqBody)
-  if (user) {
-    throw new AppError('User alread exists', 422)
+  const user = await authDb.checkUser('confirmationCode', req.query.key)
+  if (!user) {
+    throw new AppError('User not found', 422)
   }
 
-  const mailData = {
-    from: config.APP_NAME,
-    to: req.body.email,
-    subject: 'Verification Email',
-    text: 'That was easy!',
-    html: `<b>Hey there! </b>
-         <br> This is our first message sent with Nodemailer<br/>`
+  reqBody.active = true
+  const data = await userDb.updateUser(user.id, reqBody).then(async (data) => {
+    const loginData = {
+      email: data.email,
+      password: reqBody.password
+    }
+    return await authDb.login(loginData)
+  })
+
+  const response = {
+    success: true,
+    data
   }
 
-  transporter
-    .sendMail(mailData)
-    .then(() => {
-      res.status(200).json({
-        success: true,
-        message: 'Email has been sent'
-      })
-    })
-    .catch(() => {
-      throw new AppError('Send email has failed.', 502)
-    })
+  const cookieOption = await authService.createCookie()
+
+  res.cookie('jwt', data.token, cookieOption)
+  res.status(201).json(response)
 })
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const reqBody = req.body
 
-  const user = await authDb.checkUser(reqBody)
+  const user = await authDb.checkUser('email', reqBody.email)
+  if (!user) {
+    throw new AppError('User no found', 422)
+  }
+
+  reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
+  await userDb.updateUser(user.id, reqBody)
+  await email.setEmailForgotPassword(reqBody).catch((err) => {
+    console.log(err)
+    throw new AppError('Send email has failed.', 502)
+  })
+
+  const response = {
+    success: true,
+    message: 'Email has been set. Please check your email'
+  }
+
+  res.status(201).json(response)
+})
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const reqBody = req.body
+
+  const user = await authDb.checkUser('confirmationCode', req.query.key)
   if (!user) {
     throw new AppError('User not found', 422)
   }
 
-  const mailData = {
-    from: config.APP_NAME,
-    to: req.body.email,
-    subject: 'Reset Password Email',
-    text: 'That was easy!',
-    html: `<b>Hey there! </b>
-         <br> This is our first message sent with Nodemailer<br/>`
+  reqBody.confirmationCode = undefined
+  const data = await userDb.updateUser(user.id, reqBody).then(async (data) => {
+    const loginData = {
+      email: data.email,
+      password: reqBody.password
+    }
+    return await authDb.login(loginData)
+  })
+
+  const response = {
+    success: true,
+    data
   }
 
-  transporter
-    .sendMail(mailData)
-    .then(() => {
-      res.status(200).json({
-        success: true,
-        message: 'Email has been sent'
-      })
-    })
-    .catch(() => {
-      throw new AppError('Send email has failed.', 502)
-    })
+  const cookieOption = await authService.createCookie()
+
+  res.cookie('jwt', data.token, cookieOption)
+  res.status(201).json(response)
 })

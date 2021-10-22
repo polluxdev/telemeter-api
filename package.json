@@ -27,7 +27,7 @@
     "nodemon": "^2.0.13"
   },
   "scripts": {
-    "start": "NODE_ENV=production && node ./index.js",
+    "start": "SET NODE_ENV=production && node ./index.js",
     "dev": "nodemon ./index.js"
   },
   "repository": {

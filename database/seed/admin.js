@@ -6,7 +6,8 @@ const seedDatabase = async function () {
     email: 'root@root.com',
     password: 'rootadmin',
     name: 'Root',
-    role: 'super'
+    role: 'super',
+    active: true
   }
 
   await User.create(root)
