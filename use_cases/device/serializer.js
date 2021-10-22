@@ -1,8 +1,8 @@
 const _serializeSingle = (device) => {
   return {
-    id: device.id,
+    id: device._id,
     name: device.name,
-    qty: device.qty,
+    batteryStat: device.batteryStat,
     active: device.active
   }
 }

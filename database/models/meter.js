@@ -2,17 +2,19 @@ const mongoose = require('../connection')
 
 const Schema = mongoose.Schema
 
-const waterSchema = new Schema(
+const meterSchema = new Schema(
   {
     device: {
       type: mongoose.Schema.ObjectId,
       ref: 'Device'
     },
     valveStat: {
-      type: String
+      type: String,
+      default: 'ON'
     },
     batteryStat: {
-      type: String
+      type: String,
+      default: 'OK'
     },
     totalUsage: {
       type: Number,
@@ -22,6 +24,6 @@ const waterSchema = new Schema(
   { timestamps: true }
 )
 
-const Water = mongoose.model('Water', waterSchema)
+const Meter = mongoose.model('Meter', meterSchema)
 
-module.exports = Water
+module.exports = Meter

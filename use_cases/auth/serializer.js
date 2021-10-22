@@ -4,7 +4,7 @@ const _serializeSingle = (auth) => {
   const token = generateToken(auth._id, auth.email)
 
   return {
-    id: auth._id,
+    id: auth._id.toString(),
     token
   }
 }
