@@ -42,6 +42,32 @@ const passwordValidationRules = () => {
   ]
 }
 
+const profileValidationRules = () => {
+  return [
+    body('name')
+      .optional()
+      .isLength({ min: 2 })
+      .withMessage('Name must be at least 2 characters'),
+    body('phoneNumber')
+      .optional()
+      .isLength({ min: 11 })
+      .withMessage('Phone format is not valid'),
+    body('password')
+      .optional()
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters'),
+    body('confirmPassword')
+      .optional()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Confirm password does not match password')
+        }
+
+        return true
+      })
+  ]
+}
+
 const validate = (req, res, next) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
@@ -62,5 +88,6 @@ module.exports = {
   loginValidationRules,
   emailValidationRules,
   passwordValidationRules,
+  profileValidationRules,
   validate
 }

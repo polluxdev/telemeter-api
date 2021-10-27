@@ -8,9 +8,9 @@ const deviceSchema = new Schema(
       type: String,
       required: true
     },
-    water: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Water'
+    batteryStat: {
+      type: String,
+      default: 'OK'
     },
     active: {
       type: Boolean,

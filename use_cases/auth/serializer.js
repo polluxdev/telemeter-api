@@ -9,6 +9,13 @@ const _serializeSingle = (auth) => {
   }
 }
 
+const _serializeLink = (auth) => {
+  return {
+    id: auth._id,
+    key: auth.confirmationCode
+  }
+}
+
 const serializer = (data) => {
   if (!data) {
     return null
@@ -16,6 +23,10 @@ const serializer = (data) => {
 
   if (Array.isArray(data)) {
     return data.map(_serializeSingle)
+  }
+
+  if (data.confirmationCode) {
+    return _serializeLink(data)
   }
 
   return _serializeSingle(data)

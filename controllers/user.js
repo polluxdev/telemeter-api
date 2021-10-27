@@ -5,6 +5,24 @@ const catchAsync = require('../utils/catchAsync')
 const userDb = require('../use_cases/user')
 const deviceDb = require('../use_cases/device')
 
+exports.addUsers = catchAsync(async (req, res, next) => {
+  const reqBody = req.body
+
+  const user = await userDb.checkUser('email', reqBody.email)
+  if (user) {
+    throw new AppError('User already exists', 422)
+  }
+
+  const data = await userDb.addUser(reqBody)
+
+  const response = {
+    success: true,
+    data
+  }
+
+  res.status(201).json(response)
+})
+
 exports.getUsers = catchAsync(async (req, res, next) => {
   const data = await userDb.getUsers()
 
@@ -56,4 +74,15 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   }
 
   res.status(200).json(response)
+})
+
+exports.updateProfile = catchAsync(async (req, res, next) => {
+  const data = await userDb.updateUser(req.user.id, req.body)
+
+  const response = {
+    success: true,
+    data
+  }
+
+  res.status(201).json(response)
 })

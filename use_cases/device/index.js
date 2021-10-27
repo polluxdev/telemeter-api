@@ -4,8 +4,13 @@ const antares = require('../../services/antares')
 const Device = require('../../database/models/device')
 const serialize = require('./serializer')
 
-const createDevice = async () => {
-  return await Device.create({ name: uuid() })
+const createDevice = async (reqBody) => {
+  let name = uuid()
+  if (reqBody.hasOwnProperty('name')) {
+    name = reqBody.name
+  }
+
+  return await Device.create({ name })
     .then(async (device) => {
       await antares.post(
         '/',
@@ -25,13 +30,35 @@ const createDevice = async () => {
     .then(serialize)
 }
 
+const getDevices = async () => {
+  return await Device.find().then(serialize)
+}
+
 const getDevice = async (deviceID) => {
   return await Device.findById(deviceID)
-  .then(async (device) => {
-    await antares.get(
-      `/${device.name}`,
-    )
-    return device
+    .then(async (device) => {
+      const response = await antares.get(`/${device.name}/la`, 
+      {
+        headers: {
+          'Content-Type': 'application/json;ty=4'
+        }
+      })
+      const meter = response.data['m2m:cin']
+      
+      if (meter) {
+        const data = await updateDevice(device._id, { batteryStat: meter })
+        return data
+      }
+
+      return device
+    })
+    .then(serialize)
+}
+
+const updateDevice = async (deviceID, reqBody) => {
+  return await Device.findByIdAndUpdate(deviceID, reqBody, {
+    new: true,
+    runValidators: true
   }).then(serialize)
 }
 
@@ -41,6 +68,7 @@ const deleteDevice = async (deviceID) => {
 
 module.exports = {
   createDevice,
+  getDevices,
   getDevice,
   deleteDevice
 }

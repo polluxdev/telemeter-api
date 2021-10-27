@@ -13,13 +13,13 @@ const authService = require('../services/auth')
 exports.signup = catchAsync(async (req, res, next) => {
   const reqBody = req.body
 
-  const user = await authDb.checkUser('email', reqBody.email)
+  const user = await userDb.checkUser('email', reqBody.email)
   if (user) {
     throw new AppError('User already exists', 422)
   }
 
   reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
-  await authDb.signup(reqBody).catch((err) => {
+  const data = await authDb.signup(reqBody).catch((err) => {
     console.log(err)
     throw new AppError('Sign up failed', 502)
   })
@@ -30,7 +30,8 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   const response = {
     success: true,
-    message: 'Email has been set. Please check your email'
+    message: 'Email has been set. Please check your email',
+    data
   }
 
   res.status(201).json(response)
@@ -53,12 +54,13 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.register = catchAsync(async (req, res, next) => {
   const reqBody = req.body
 
-  const user = await authDb.checkUser('confirmationCode', req.query.key)
+  const user = await userDb.checkUser('confirmationCode', req.query.key)
   if (!user) {
-    throw new AppError('User not found', 422)
+    throw new AppError('Link is expired', 422)
   }
 
   reqBody.active = true
+  reqBody.$unset = { confirmationCode: 1 }
   const data = await userDb.updateUser(user.id, reqBody).then(async (data) => {
     const loginData = {
       email: data.email,
@@ -81,13 +83,15 @@ exports.register = catchAsync(async (req, res, next) => {
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const reqBody = req.body
 
-  const user = await authDb.checkUser('email', reqBody.email)
+  const user = await userDb.checkUser('email', reqBody.email)
   if (!user) {
     throw new AppError('User no found', 422)
   }
 
   reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
-  await userDb.updateUser(user.id, reqBody)
+  const data = await userDb.updateUser(user.id, reqBody).then(() => {
+    return authDb.forgotPassword(reqBody)
+  })
   await email.setEmailForgotPassword(reqBody).catch((err) => {
     console.log(err)
     throw new AppError('Send email has failed.', 502)
@@ -95,7 +99,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   const response = {
     success: true,
-    message: 'Email has been set. Please check your email'
+    message: 'Email has been set. Please check your email',
+    data
   }
 
   res.status(201).json(response)
@@ -104,12 +109,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 exports.resetPassword = catchAsync(async (req, res, next) => {
   const reqBody = req.body
 
-  const user = await authDb.checkUser('confirmationCode', req.query.key)
+  const user = await userDb.checkUser('confirmationCode', req.query.key)
   if (!user) {
-    throw new AppError('User not found', 422)
+    throw new AppError('Link is expired', 422)
   }
 
-  reqBody.confirmationCode = undefined
+  reqBody.$unset = { confirmationCode: 1 }
   const data = await userDb.updateUser(user.id, reqBody).then(async (data) => {
     const loginData = {
       email: data.email,
