@@ -31,6 +31,14 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
   next()
 })
 
+exports.checkAuth = catchAsync(async (req, res, next) => {
+  if (!req.user) {
+    return next(new AppError('Unauthorized!', 401))
+  }
+
+  next()
+})
+
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (roles.includes(req.user.role)) {

@@ -2,12 +2,24 @@ const express = require('express')
 
 const userController = require('../controllers/user')
 const authMiddleware = require('../middlewares/auth')
+const {
+  userValidationRules,
+  emailValidationRules,
+  validate
+} = require('../validator/user')
 
 const router = express.Router()
 
 router.use(authMiddleware.restrictTo('user'))
 
-router.post('/users', userController.getUsers)
+router.post(
+  '/users',
+  emailValidationRules(),
+  userValidationRules(),
+  validate,
+  userController.addUsers
+)
+router.get('/users', userController.getUsers)
 router.post('/users/:id', userController.getUser)
 router.patch('/users/:id', userController.updateUser)
 router.delete('/users/:id', userController.deleteUser)

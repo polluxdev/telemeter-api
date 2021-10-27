@@ -29,6 +29,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
+      enum: ['root', 'super', 'admin', 'user'],
       default: 'user'
     },
     active: {
@@ -61,11 +62,8 @@ userSchema.pre('findOneAndUpdate', async function (next) {
   next()
 })
 
-userSchema.methods.correctPassword = async function (
-  inputPassword,
-  currentPassword
-) {
-  return await bcrypt.compare(inputPassword, currentPassword)
+userSchema.methods.correctPassword = async function (password, userPassword) {
+  return await bcrypt.compare(password, userPassword)
 }
 
 const User = mongoose.model('User', userSchema)

@@ -8,7 +8,7 @@ const signup = async (reqBody) => {
     confirmationCode: reqBody.confirmationCode
   }
 
-  return await User.create(newUser)
+  return await User.create(newUser).then(serialize)
 }
 
 const login = async (reqBody) => {
@@ -26,12 +26,17 @@ const login = async (reqBody) => {
     .then(serialize)
 }
 
-const checkUser = async (key, value) => {
-  return await User.findOne({ [key]: value }).exec()
+const forgotPassword = async (reqBody) => {
+  const user = {
+    email: reqBody.email,
+    confirmationCode: reqBody.confirmationCode
+  }
+
+  return await User.findOne(user).then(serialize)
 }
 
 module.exports = {
   signup,
   login,
-  checkUser
+  forgotPassword
 }
