@@ -32,6 +32,9 @@ const userSchema = new Schema(
       enum: ['root', 'super', 'admin', 'user'],
       default: 'user'
     },
+    group: {
+      type: String
+    },
     active: {
       type: Boolean,
       default: false
@@ -55,9 +58,9 @@ userSchema.pre('save', function (next) {
 })
 
 userSchema.pre('findOneAndUpdate', async function (next) {
-  if (!this._update.password) return next()
+  if (!this._update.confirmNewPassword) return next()
 
-  this._update.password = await bcrypt.hash(this._update.password, 12)
+  this._update.password = await bcrypt.hash(this._update.confirmNewPassword, 12)
 
   next()
 })

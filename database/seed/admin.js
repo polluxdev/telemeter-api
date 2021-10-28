@@ -6,7 +6,7 @@ const seedDatabase = async function () {
     email: 'root@root.com',
     password: 'rootadmin',
     name: 'Root',
-    role: 'super',
+    role: 'root',
     active: true
   }
 

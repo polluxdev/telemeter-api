@@ -5,7 +5,7 @@ const authMiddleware = require('../middlewares/auth')
 const { deviceValidationRules, validate } = require('../validator/device')
 const router = express.Router()
 
-router.use(authMiddleware.protectRoute)
+router.use(authMiddleware.protectRoute, authMiddleware.restrictTo('user'))
 
 router.get('/devices', deviceController.getDevices)
 router.post(

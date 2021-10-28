@@ -47,6 +47,10 @@ exports.getUser = catchAsync(async (req, res, next) => {
 })
 
 exports.updateUser = catchAsync(async (req, res, next) => {
+  if (req.body.hasOwnProperty('password')) {
+    throw new AppError('This is not for password update!', 400)
+  }
+  
   const data = await userDb.updateUser(req.params.id, req.body)
 
   const response = {
@@ -74,15 +78,4 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   }
 
   res.status(200).json(response)
-})
-
-exports.updateProfile = catchAsync(async (req, res, next) => {
-  const data = await userDb.updateUser(req.user.id, req.body)
-
-  const response = {
-    success: true,
-    data
-  }
-
-  res.status(201).json(response)
 })

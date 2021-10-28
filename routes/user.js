@@ -10,7 +10,7 @@ const {
 
 const router = express.Router()
 
-router.use(authMiddleware.restrictTo('user'))
+router.use(authMiddleware.protectRoute, authMiddleware.restrictTo('user'))
 
 router.post(
   '/users',
@@ -20,7 +20,7 @@ router.post(
   userController.addUsers
 )
 router.get('/users', userController.getUsers)
-router.post('/users/:id', userController.getUser)
+router.get('/users/:id', userController.getUser)
 router.patch('/users/:id', userController.updateUser)
 router.delete('/users/:id', userController.deleteUser)
 
