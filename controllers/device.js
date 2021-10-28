@@ -53,15 +53,7 @@ exports.updateDevice = catchAsync(async (req, res, next) => {
 })
 
 exports.deleteDevice = catchAsync(async (req, res, next) => {
-  await deviceDb
-    .deleteDevice(req.params.id)
-    .then(async (Device) => {
-      return await deviceDb.deleteDevice(Device.device)
-    })
-    .catch((err) => {
-      console.log(err)
-      throw new AppError('Delete Device failed', 422)
-    })
+  await deviceDb.deleteDevice(req.params.id)
 
   const response = {
     success: true,

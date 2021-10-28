@@ -1,7 +1,7 @@
+const i18n = require('i18n')
 const crypto = require('crypto')
 
 const AppError = require('../utils/appError')
-const config = require('../config')
 const catchAsync = require('../utils/catchAsync')
 
 const authDb = require('../use_cases/auth')
@@ -15,22 +15,22 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   const user = await userDb.checkUser('email', reqBody.email)
   if (user) {
-    throw new AppError('User already exists', 422)
+    throw new AppError(i18n.__('users.exists'), 422)
   }
 
   reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
   const data = await authDb.signup(reqBody).catch((err) => {
     console.log(err)
-    throw new AppError('Sign up failed', 502)
+    throw new AppError(i18n.__('auth.sign_up_failed'), 502)
   })
   await email.setEmailVerification(reqBody).catch((err) => {
     console.log(err)
-    throw new AppError('Send email has failed.', 502)
+    throw new AppError(i18n.__('email.send_failed'), 502)
   })
 
   const response = {
     success: true,
-    message: 'Email has been set. Please check your email',
+    message: i18n.__('email.send_success'),
     data
   }
 

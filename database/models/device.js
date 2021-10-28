@@ -15,10 +15,19 @@ const deviceSchema = new Schema(
     active: {
       type: Boolean,
       default: true
+    },
+    deletedAt: {
+      type: Date
     }
   },
   { timestamps: true }
 )
+
+deviceSchema.pre(/^find/, function (next) {
+  this.find({ deletedAt: { $exists: false } })
+
+  next()
+})
 
 const Device = mongoose.model('Device', deviceSchema)
 

@@ -37,14 +37,13 @@ const getDevices = async () => {
 const getDevice = async (deviceID) => {
   return await Device.findById(deviceID)
     .then(async (device) => {
-      const response = await antares.get(`/${device.name}/la`, 
-      {
+      const response = await antares.get(`/${device.name}/la`, {
         headers: {
           'Content-Type': 'application/json;ty=4'
         }
       })
       const meter = response.data['m2m:cin']
-      
+
       if (meter) {
         const data = await updateDevice(device._id, { batteryStat: meter })
         return data
@@ -63,7 +62,16 @@ const updateDevice = async (deviceID, reqBody) => {
 }
 
 const deleteDevice = async (deviceID) => {
-  return await Device.findByIdAndDelete(deviceID)
+  return await Device.findByIdAndUpdate(
+    deviceID,
+    {
+      deletedAt: Date.now()
+    },
+    {
+      new: true,
+      runValidators: true
+    }
+  ).then(serialize)
 }
 
 module.exports = {

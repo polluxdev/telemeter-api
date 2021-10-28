@@ -38,6 +38,9 @@ const userSchema = new Schema(
     active: {
       type: Boolean,
       default: false
+    },
+    deletedAt: {
+      type: Date
     }
   },
   { timestamps: true }
@@ -58,9 +61,16 @@ userSchema.pre('save', function (next) {
 })
 
 userSchema.pre('findOneAndUpdate', async function (next) {
-  if (!this._update.confirmNewPassword) return next()
+  if (!this._update.password && !this._update.confirmNewPassword) return next()
 
-  this._update.password = await bcrypt.hash(this._update.confirmNewPassword, 12)
+  let password = this._update.confirmNewPassword || this._update.password
+  this._update.password = await bcrypt.hash(password, 12)
+
+  next()
+})
+
+userSchema.pre(/^find/, function (next) {
+  this.find({ deletedAt: { $exists: false } })
 
   next()
 })

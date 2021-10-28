@@ -29,7 +29,16 @@ const updateUser = async (userID, reqBody) => {
 }
 
 const deleteUser = async (userID) => {
-  return await User.findByIdAndDelete(userID)
+  return await User.findByIdAndUpdate(
+    userID,
+    {
+      deletedAt: Date.now()
+    },
+    {
+      new: true,
+      runValidators: true
+    }
+  ).then(serialize)
 }
 
 const checkUser = async (key, value) => {
