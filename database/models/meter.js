@@ -1,3 +1,5 @@
+const mongoosePaginate = require('mongoose-paginate-v2')
+
 const mongoose = require('../connection')
 
 const Schema = mongoose.Schema
@@ -23,6 +25,8 @@ const meterSchema = new Schema(
   },
   { timestamps: true }
 )
+
+meterSchema.plugin(mongoosePaginate)
 
 const Meter = mongoose.model('Meter', meterSchema)
 

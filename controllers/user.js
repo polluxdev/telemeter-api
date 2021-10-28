@@ -23,11 +23,10 @@ exports.addUsers = catchAsync(async (req, res, next) => {
 })
 
 exports.getUsers = catchAsync(async (req, res, next) => {
-  const data = await userDb.getUsers()
+  const data = await userDb.getUsers(req.query)
 
   const response = {
     success: true,
-    count: data.length,
     data
   }
 

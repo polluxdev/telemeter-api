@@ -13,8 +13,8 @@ const addUser = async (reqBody) => {
   return await User.create(newUser).then(serialize)
 }
 
-const getUsers = async () => {
-  return await User.find().then(serialize)
+const getUsers = async (query) => {
+  return await User.paginate({}, query).then(serialize)
 }
 
 const getUser = async (userID) => {

@@ -19,11 +19,10 @@ exports.createDevice = catchAsync(async (req, res, next) => {
 })
 
 exports.getDevices = catchAsync(async (req, res, next) => {
-  const data = await deviceDb.getDevices()
+  const data = await deviceDb.getDevices(req.query)
 
   const response = {
     success: true,
-    count: data.length,
     data
   }
 

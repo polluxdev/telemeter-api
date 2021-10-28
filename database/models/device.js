@@ -1,3 +1,5 @@
+const mongoosePaginate = require('mongoose-paginate-v2')
+
 const mongoose = require('../connection')
 
 const Schema = mongoose.Schema
@@ -22,6 +24,8 @@ const deviceSchema = new Schema(
   },
   { timestamps: true }
 )
+
+deviceSchema.plugin(mongoosePaginate)
 
 deviceSchema.pre(/^find/, function (next) {
   this.find({ deletedAt: { $exists: false } })

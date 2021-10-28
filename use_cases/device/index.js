@@ -30,8 +30,8 @@ const createDevice = async (reqBody) => {
     .then(serialize)
 }
 
-const getDevices = async () => {
-  return await Device.find().then(serialize)
+const getDevices = async (query) => {
+  return await Device.paginate({}, query).then(serialize)
 }
 
 const getDevice = async (deviceID) => {
