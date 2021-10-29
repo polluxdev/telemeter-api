@@ -27,7 +27,8 @@ exports.getUsers = catchAsync(async (req, res, next) => {
 
   const response = {
     success: true,
-    data
+    count: data.data.length,
+    ...data
   }
 
   res.status(200).json(response)
