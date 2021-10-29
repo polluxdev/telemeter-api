@@ -30,21 +30,37 @@ const createDevice = async (reqBody) => {
     .then(serialize)
 }
 
-const getDevices = async () => {
-  return await Device.find().then(serialize)
+const getDevices = async (queryString) => {
+  const { page = 1, limit = 5, ...fields } = queryString
+  const query = Object.create({})
+  if (Object.keys(fields).length > 0) {
+    for (const property in fields) {
+      query[property] = fields[property]
+    }
+  }
+
+  const customLabels = {
+    totalDocs: 'totalCount',
+    docs: 'data',
+    limit: 'perPage',
+    page: 'currentPage'
+  }
+
+  return await Device.paginate(query, { page, limit, customLabels }).then(
+    serialize
+  )
 }
 
 const getDevice = async (deviceID) => {
   return await Device.findById(deviceID)
     .then(async (device) => {
-      const response = await antares.get(`/${device.name}/la`, 
-      {
+      const response = await antares.get(`/${device.name}/la`, {
         headers: {
           'Content-Type': 'application/json;ty=4'
         }
       })
       const meter = response.data['m2m:cin']
-      
+
       if (meter) {
         const data = await updateDevice(device._id, { batteryStat: meter })
         return data
@@ -63,7 +79,16 @@ const updateDevice = async (deviceID, reqBody) => {
 }
 
 const deleteDevice = async (deviceID) => {
-  return await Device.findByIdAndDelete(deviceID)
+  return await Device.findByIdAndUpdate(
+    deviceID,
+    {
+      deletedAt: Date.now()
+    },
+    {
+      new: true,
+      runValidators: true
+    }
+  ).then(serialize)
 }
 
 module.exports = {

@@ -13,8 +13,25 @@ const addUser = async (reqBody) => {
   return await User.create(newUser).then(serialize)
 }
 
-const getUsers = async () => {
-  return await User.find().then(serialize)
+const getUsers = async (queryString) => {
+  const { page = 1, limit = 5, ...fields } = queryString
+  const query = Object.create({})
+  if (Object.keys(fields).length > 0) {
+    for (const property in fields) {
+      query[property] = fields[property]
+    }
+  }
+
+  const customLabels = {
+    totalDocs: 'totalCount',
+    docs: 'data',
+    limit: 'perPage',
+    page: 'currentPage'
+  }
+
+  return await User.paginate(query, { page, limit, customLabels }).then(
+    serialize
+  )
 }
 
 const getUser = async (userID) => {
@@ -29,7 +46,16 @@ const updateUser = async (userID, reqBody) => {
 }
 
 const deleteUser = async (userID) => {
-  return await User.findByIdAndDelete(userID)
+  return await User.findByIdAndUpdate(
+    userID,
+    {
+      deletedAt: Date.now()
+    },
+    {
+      new: true,
+      runValidators: true
+    }
+  ).then(serialize)
 }
 
 const checkUser = async (key, value) => {

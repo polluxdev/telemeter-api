@@ -3,7 +3,6 @@ const i18n = require('i18n')
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
 const userDb = require('../use_cases/user')
-const deviceDb = require('../use_cases/device')
 
 exports.addUsers = catchAsync(async (req, res, next) => {
   const reqBody = req.body
@@ -24,12 +23,12 @@ exports.addUsers = catchAsync(async (req, res, next) => {
 })
 
 exports.getUsers = catchAsync(async (req, res, next) => {
-  const data = await userDb.getUsers()
+  const data = await userDb.getUsers(req.query)
 
   const response = {
     success: true,
-    count: data.length,
-    data
+    count: data.data.length,
+    ...data
   }
 
   res.status(200).json(response)
@@ -47,6 +46,10 @@ exports.getUser = catchAsync(async (req, res, next) => {
 })
 
 exports.updateUser = catchAsync(async (req, res, next) => {
+  if (req.body.hasOwnProperty('password')) {
+    throw new AppError('This is not for password update!', 400)
+  }
+
   const data = await userDb.updateUser(req.params.id, req.body)
 
   const response = {
@@ -58,31 +61,13 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 })
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
-  await userDb
-    .deleteUser(req.params.id)
-    .then(async (user) => {
-      return await deviceDb.deleteDevice(user.device)
-    })
-    .catch((err) => {
-      console.log(err)
-      throw new AppError('Delete user failed', 422)
-    })
+  const data = await userDb.deleteUser(req.params.id)
 
   const response = {
     success: true,
-    message: 'User deleted successfully'
-  }
-
-  res.status(200).json(response)
-})
-
-exports.updateProfile = catchAsync(async (req, res, next) => {
-  const data = await userDb.updateUser(req.user.id, req.body)
-
-  const response = {
-    success: true,
+    message: 'User deleted successfully',
     data
   }
 
-  res.status(201).json(response)
+  res.status(200).json(response)
 })

@@ -16,9 +16,8 @@ const serializer = (data) => {
     return null
   }
 
-  if (data.hasOwnProperty('data')) {
-    data.data = data.data.map(_serializeSingle)
-    return data
+  if (Array.isArray(data)) {
+    return data.map(_serializeSingle)
   }
 
   return _serializeSingle(data)

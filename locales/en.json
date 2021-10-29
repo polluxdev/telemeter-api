@@ -15,5 +15,14 @@
 		"server_running": "Listening on PORT: %d",
 		"too_many_request": "Too many request from this IP! Please try again in an hour."
 	},
-	"": ""
+	"users": {
+		"exists": "User already exists"
+	},
+	"auth": {
+		"sign_up_failed": "Sign up failed"
+	},
+	"email": {
+		"send_failed": "Send email has failed.",
+		"send_success": "Email has been set. Please check your email."
+	}
 }

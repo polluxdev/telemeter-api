@@ -27,6 +27,24 @@ const emailValidationRules = () => {
   return [body('email').isEmail().withMessage('Email is not valid')]
 }
 
+const changePasswordValidationRules = () => {
+  return [
+    body('oldPassword')
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters'),
+    body('newPassword')
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters'),
+    body('confirmNewPassword').custom((value, { req }) => {
+      if (value !== req.body.newPassword) {
+        throw new Error('Confirm password does not match password')
+      }
+
+      return true
+    })
+  ]
+}
+
 const passwordValidationRules = () => {
   return [
     body('password')
@@ -87,6 +105,7 @@ module.exports = {
   userValidationRules,
   loginValidationRules,
   emailValidationRules,
+  changePasswordValidationRules,
   passwordValidationRules,
   profileValidationRules,
   validate
