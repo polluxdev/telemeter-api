@@ -1,28 +1,71 @@
 {
 	"index": "Hello, Welcome!",
+	"info": {
+		"general": {
+			"switch_locale_message": "Language has been set.",
+			"server_running": "Listening on PORT: %d.",
+			"too_many_request": "Too many request from this IP! Please try again in an hour."
+		}
+	},
+	"success": {
+		"email": {
+			"send_success": "Email has been set. Please check your email."
+		},
+		"device": {
+			"deleted": "Device deleted successfully."
+		},
+		"user": {
+			"deleted": "User deleted successfully."
+		}
+	},
 	"error": {
+		"general": {
+			"url_not_found": "Can't find %s on this server.",
+			"global_error": "Something went wrong.",
+			"not_password_update": "This is not for password update.",
+			"for_password_update": "This is only for password update."
+		},
 		"server": {
 			"unhandle_rejection_name": "unhandledRejection",
-			"unhandle_rejection_message": "UNHANDLED REJECTION!",
+			"unhandle_rejection_message": "UNHANDLED REJECTION.",
 			"uncaught_exception_name": "uncaughtException",
-			"uncaught_exception_message": "UNCAUGHT EXCEPTION!"
+			"uncaught_exception_message": "UNCAUGHT EXCEPTION."
 		},
-		"url_not_found": "Can't find %s on this server!",
-		"user_already_exists": "Email has already registered"
-	},
-	"general": {
-		"switch_locale_message": "Language has been set",
-		"server_running": "Listening on PORT: %d",
-		"too_many_request": "Too many request from this IP! Please try again in an hour."
-	},
-	"users": {
-		"exists": "User already exists"
-	},
-	"auth": {
-		"sign_up_failed": "Sign up failed"
-	},
-	"email": {
-		"send_failed": "Send email has failed.",
-		"send_success": "Email has been set. Please check your email."
+		"auth": {
+			"sign_up_failed": "Sign up failed.",
+			"unauthorized": "Unauthorized.",
+			"not_have_permission": "You don't have permission.",
+			"wrong_email_password": "Incorrect email or password.",
+			"wrong_old_password": "Incorrect old password."
+		},
+		"email": {
+			"send_failed": "Send email has failed.",
+			"already_registered": "Email has already registered."
+		},
+		"user": {
+			"already_exists": "User already exists.",
+			"not_found": "User not found.",
+			"not_exists": "User does no longer exists."
+		},
+		"link": {
+			"expired": "Link is expired."
+		},
+		"device": {
+			"not_found_antares": "Device not found in antares data."
+		},
+		"validator": {
+			"error": "Validation error.",
+			"device": {
+				"length": "Device name must be at least 2 characters.",
+				"string": "Device name must be string."
+			},
+			"user": {
+				"name_length": "Name must be at least 2 characters.",
+				"phone_format": "Phone format is not valid.",
+				"password_length": "Password must be at least 8 characters.",
+				"email_format": "Email is not valid.",
+				"password_not_match": "Confirm password does not match password."
+			}
+		}
 	}
 }

@@ -5,9 +5,13 @@ const deviceValidationRules = () => {
     body('name')
       .optional()
       .isLength({ min: 2 })
-      .withMessage('Device name must be at least 2 characters')
+      .withMessage((_, { req }) => {
+        return req.__('error.validator.device.length')
+      })
       .isString()
-      .withMessage('Device name must be string')
+      .withMessage((_, { req }) => {
+        return req.__('error.validator.device.string')
+      })
   ]
 }
 
@@ -21,7 +25,7 @@ const validate = (req, res, next) => {
 
   return res.status(422).json({
     success: false,
-    message: 'Validation error',
+    message: res.__('error.validator.error'),
     errors: extractedErrors
   })
 }

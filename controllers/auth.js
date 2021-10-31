@@ -15,22 +15,22 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   const user = await userDb.checkUser('email', reqBody.email)
   if (user) {
-    throw new AppError(i18n.__('users.exists'), 422)
+    throw new AppError(i18n.__('error.user.exists'), 422)
   }
 
   reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
   const data = await authDb.signup(reqBody).catch((err) => {
     console.log(err)
-    throw new AppError(i18n.__('auth.sign_up_failed'), 502)
+    throw new AppError(i18n.__('error.auth.sign_up_failed'), 502)
   })
   await email.setEmailVerification(reqBody).catch((err) => {
     console.log(err)
-    throw new AppError(i18n.__('email.send_failed'), 502)
+    throw new AppError(i18n.__('error.email.send_failed'), 502)
   })
 
   const response = {
     success: true,
-    message: i18n.__('email.send_success'),
+    message: i18n.__('success.email.send_success'),
     data
   }
 
@@ -56,7 +56,7 @@ exports.register = catchAsync(async (req, res, next) => {
 
   const user = await userDb.checkUser('confirmationCode', req.query.key)
   if (!user) {
-    throw new AppError('Link is expired', 422)
+    throw new AppError(i18n.__('error.link.expired'), 422)
   }
 
   reqBody.active = true
@@ -85,7 +85,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   const user = await userDb.checkUser('email', reqBody.email)
   if (!user) {
-    throw new AppError('User no found', 422)
+    throw new AppError(i18n.__('error.user.not_found'), 422)
   }
 
   reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
@@ -94,12 +94,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   })
   await email.setEmailForgotPassword(reqBody).catch((err) => {
     console.log(err)
-    throw new AppError('Send email has failed.', 502)
+    throw new AppError(i18n.__('error.email.send_failed'), 502)
   })
 
   const response = {
     success: true,
-    message: 'Email has been set. Please check your email',
+    message: i18n.__('success.email.send_success'),
     data
   }
 
@@ -111,7 +111,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   const user = await userDb.checkUser('confirmationCode', req.query.key)
   if (!user) {
-    throw new AppError('Link is expired', 422)
+    throw new AppError(i18n.__('error.link.expired'), 422)
   }
 
   reqBody.$unset = { confirmationCode: 1 }

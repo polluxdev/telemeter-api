@@ -14,6 +14,7 @@ const cookieParser = require('cookie-parser')
 const config = require('./config')
 const routes = require('./routes')
 const AppError = require('./utils/appError')
+const authService = require('./services/auth')
 
 const app = express()
 const port = config.PORT || 3000
@@ -38,9 +39,9 @@ i18n.configure({
 app.use(i18n.init)
 
 const limiter = rateLimit({
-  max: config.MAX_RATE_LIMIT || 30000,
-  windowMs: config.RESET_RATE_INTERVAL || 60 * 60 * 1000,
-  message: i18n.__('general.too_many_request')
+  max: config.MAX_RATE_LIMIT * 1000,
+  windowMs: config.RESET_RATE_INTERVAL * 60 * 60 * 1000,
+  message: i18n.__('info.general.too_many_request')
 })
 
 app.use(apiVersion, limiter)
@@ -73,6 +74,7 @@ app.use(mongoSanitize())
 app.use((req, res, next) => {
   if (req.cookies.lang) {
     i18n.setLocale(req.cookies.lang)
+    req.setLocale(req.cookies.lang)
   } else {
     i18n.setLocale('en')
   }
@@ -82,10 +84,10 @@ app.use((req, res, next) => {
 
 app.post('/switch', (req, res, next) => {
   i18n.setLocale(req.query.lang)
-  res.cookie('lang', req.query.lang, { maxAge: 60000, httpOnly: true })
+  res.cookie('lang', req.query.lang, authService.createCookie())
   res.status(200).json({
     status: 'success',
-    message: i18n.__('general.switch_locale_message')
+    message: i18n.__('info.general.switch_locale_message')
   })
 })
 
@@ -100,7 +102,7 @@ app.use(apiVersion, routes)
 
 app.all('*', (req, res, next) => {
   const error = new AppError(
-    i18n.__('error.url_not_found', req.originalUrl),
+    i18n.__('error.general.url_not_found', req.originalUrl),
     404
   )
   next(error)
@@ -121,12 +123,12 @@ app.use((err, req, res, next) => {
 
   res.status(500).json({
     success: false,
-    message: 'Something went wrong!'
+    message: i18n.__('error.general.global_error')
   })
 })
 
 const server = app.listen(port, () => {
-  console.log(i18n.__('general.server_running', port))
+  console.log(i18n.__('info.general.server_running', port))
 })
 
 process.on(i18n.__('error.server.unhandle_rejection_name'), (error) => {
