@@ -14,7 +14,7 @@ router.post(
   validate,
   deviceController.createDevice
 )
-router.post('/devices/:id', deviceController.getDevice)
+router.get('/devices/:id', deviceController.getDevice)
 router.patch('/devices/:id', deviceController.updateDevice)
 router.delete('/devices/:id', deviceController.deleteDevice)
 

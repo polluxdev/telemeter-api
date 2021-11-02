@@ -1,3 +1,5 @@
+const i18n = require('i18n')
+
 const AppError = require('../../utils/appError')
 
 const User = require('../../database/models/user')
@@ -12,7 +14,7 @@ const checkUser = async (userID, reqBody) => {
         !user ||
         !(await user.correctPassword(reqBody.oldPassword, user.password))
       ) {
-        throw new AppError('Incorrect old password!', 401)
+        throw new AppError(i18n.__('error.auth.wrong_old_password'), 401)
       }
 
       return user

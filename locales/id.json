@@ -1,18 +1,71 @@
 {
-    "index": "Halo, Selamat Datang!",
-    "error": {
-        "server": {
-            "unhandle_rejection_name": "unhandledRejection",
-            "unhandle_rejection_message": "UNHANDLED REJECTION!",
-            "uncaught_exception_name": "uncaughtException",
-            "uncaught_exception_message": "UNCAUGHT EXCEPTION!"
-        },
-        "url_not_found": "Tidak dapat menemukan %s pada server!",
-        "user_already_exists": "Email sudah terdaftar"
-    },
-    "general": {
-        "switch_locale_message": "Bahasa telah diatur",
-        "server_running": "Listening on PORT: %d",
-        "too_many_request": "Too many request from this IP! Please try again in an hour."
-    }
+	"index": "Halo, Selamat Datang!",
+	"info": {
+		"general": {
+			"switch_locale_message": "Bahasa telah diatur.",
+			"server_running": "Listening on PORT: %d.",
+			"too_many_request": "Terlalu banyak permintaan dari IP ini! Silakan coba lagi dalam satu jam."
+		}
+	},
+	"success": {
+		"email": {
+			"send_success": "Email telah dikirim. Silakan periksa email Anda."
+		},
+		"device": {
+			"deleted": "Perangkat berhasil dihapus."
+		},
+		"user": {
+			"deleted": "Pengguna berhasil dihapus."
+		}
+	},
+	"error": {
+		"general": {
+			"url_not_found": "Tidak dapat menemukan %s di server ini.",
+			"global_error": "Something went wrong.",
+			"not_password_update": "Ini bukan untuk pembaruan kata sandi.",
+			"for_password_update": "Ini hanya untuk pembaruan kata sandi."
+		},
+		"server": {
+			"unhandle_rejection_name": "unhandledRejection",
+			"unhandle_rejection_message": "UNHANDLED REJECTION.",
+			"uncaught_exception_name": "uncaughtException",
+			"uncaught_exception_message": "UNCAUGHT EXCEPTION."
+		},
+		"auth": {
+			"sign_up_failed": "Pendaftaran gagal.",
+			"unauthorized": "Unauthorized.",
+			"not_have_permission": "Anda tidak memiliki izin.",
+			"wrong_email_password": "Email atau kata sandi salah.",
+			"wrong_old_password": "Kata sandi lama salah."
+		},
+		"email": {
+			"send_failed": "Gagal mengirim email.",
+			"already_registered": "Email sudah terdaftar."
+		},
+		"user": {
+			"already_exists": "Pengguna sudah terdaftar.",
+			"not_found": "Pengguna tidak ditemukan.",
+			"not_exists": "Pengguna sudah tidak terdaftar."
+		},
+		"link": {
+			"expired": "Tautan kedaluwarsa."
+		},
+		"device": {
+			"not_found_antares": "Perangkat tidak ditemukan di data antares."
+		},
+		"validator": {
+			"error": "Kesalahan validasi.",
+			"device": {
+				"length": "Nama perangkat minimal harus 2 karakter.",
+				"string": "Nama perangkat harus berupa string."
+			},
+			"user": {
+				"name_length": "Nama harus minimal 2 karakter.",
+				"phone_format": "Format nomor telepon tidak valid.",
+				"password_length": "Kata sandi harus minimal 8 karakter.",
+				"email_format": "Email tidak valid.",
+				"password_not_match": "Konfirmasi kata sandi tidak cocok dengan kata sandi."
+			}
+		}
+	}
 }

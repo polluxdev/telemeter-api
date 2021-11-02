@@ -1,8 +1,11 @@
+const i18n = require('i18n')
+
 const uuid = require('../../services/uuid')
 const antares = require('../../services/antares')
 
 const Device = require('../../database/models/device')
 const serialize = require('./serializer')
+const AppError = require('../../utils/appError')
 
 const createDevice = async (reqBody) => {
   let name = uuid()
@@ -54,17 +57,15 @@ const getDevices = async (queryString) => {
 const getDevice = async (deviceID) => {
   return await Device.findById(deviceID)
     .then(async (device) => {
-      const response = await antares.get(`/${device.name}/la`, {
-        headers: {
-          'Content-Type': 'application/json;ty=4'
-        }
-      })
-      const meter = response.data['m2m:cin']
-
-      if (meter) {
-        const data = await updateDevice(device._id, { batteryStat: meter })
-        return data
-      }
+      await antares
+        .get(`/${device.name}`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .catch(() => {
+          throw new AppError(i18n.__('error.device.not_found_antares'), 422)
+        })
 
       return device
     })
@@ -95,5 +96,6 @@ module.exports = {
   createDevice,
   getDevices,
   getDevice,
+  updateDevice,
   deleteDevice
 }

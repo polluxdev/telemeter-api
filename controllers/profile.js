@@ -1,3 +1,5 @@
+const i18n = require('i18n')
+
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
 const profileDb = require('../use_cases/profile')
@@ -16,7 +18,7 @@ exports.getProfile = catchAsync(async (req, res, next) => {
 
 exports.updateProfile = catchAsync(async (req, res, next) => {
   if (req.body.hasOwnProperty('password')) {
-    throw new AppError('This is not for password update!', 400)
+    throw new AppError(i18n.__('error.general.not_password_update'), 400)
   }
 
   const data = await userDb.updateUser(req.user.id, req.body)
@@ -31,12 +33,14 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   if (!req.body.hasOwnProperty('oldPassword')) {
-    throw new AppError('This is only for password update!', 400)
+    throw new AppError(i18n.__('error.general.for_password_update'), 400)
   }
 
   const user = await profileDb.checkUser(req.params.id, req.body)
+  if (!user) {
+    throw new AppError(i18n.__('error.user.not_found'), 422)
+  }
 
-  console.log(user)
   const data = await userDb.updateUser(req.user.id, req.body)
 
   const response = {

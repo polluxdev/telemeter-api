@@ -1,5 +1,6 @@
 const { promisify } = require('util')
 const jwt = require('jsonwebtoken')
+const i18n = require('i18n')
 
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
@@ -15,7 +16,7 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new AppError('Unauthorized!', 401))
+    return next(new AppError(i18n.__('error.auth.unauthorized'), 401))
   }
 
   const decoded = await promisify(jwt.verify)(token, config.jwt.JWT_SECRET_KEY)
@@ -23,7 +24,7 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
   const user = await userDb.getUser(decoded.userId)
 
   if (!user) {
-    return next(new AppError('User does no longer exists!', 401))
+    return next(new AppError(i18n.__('error.user.not_exists'), 401))
   }
 
   req.user = user
@@ -33,7 +34,7 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
 
 exports.checkAuth = catchAsync(async (req, res, next) => {
   if (!req.user) {
-    return next(new AppError('Unauthorized!', 401))
+    return next(new AppError(i18n.__('error.auth.unauthorized'), 401))
   }
 
   next()
@@ -42,7 +43,7 @@ exports.checkAuth = catchAsync(async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (roles.includes(req.user.role)) {
-      return next(new AppError("You don't have permission!", 403))
+      return next(new AppError(i18n.__('error.auth.not_have_permission'), 403))
     }
 
     next()

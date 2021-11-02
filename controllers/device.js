@@ -2,13 +2,10 @@ const i18n = require('i18n')
 
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
-const userDb = require('../use_cases/user')
 const deviceDb = require('../use_cases/device')
 
 exports.createDevice = catchAsync(async (req, res, next) => {
   const data = await deviceDb.createDevice(req.body)
-
-  await userDb.updateUser(req.user.id, { device: data.id })
 
   const response = {
     success: true,
@@ -57,7 +54,7 @@ exports.deleteDevice = catchAsync(async (req, res, next) => {
 
   const response = {
     success: true,
-    message: 'Device deleted successfully'
+    message: i18n.__('success.device.deleted')
   }
 
   res.status(200).json(response)

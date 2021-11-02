@@ -1,3 +1,5 @@
+const i18n = require('i18n')
+
 const User = require('../../database/models/user')
 const serialize = require('./serializer')
 const AppError = require('../../utils/appError')
@@ -18,7 +20,7 @@ const login = async (reqBody) => {
     .select('+password')
     .then(async (user) => {
       if (!user || !(await user.correctPassword(password, user.password))) {
-        throw new AppError('Incorrect email or password!', 401)
+        throw new AppError(i18n.__('error.auth.wrong_email_password'), 401)
       }
 
       return user

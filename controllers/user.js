@@ -9,7 +9,7 @@ exports.addUsers = catchAsync(async (req, res, next) => {
 
   const user = await userDb.checkUser('email', reqBody.email)
   if (user) {
-    throw new AppError('User already exists', 422)
+    throw new AppError(i18n.__('error.user.already_exists'), 422)
   }
 
   const data = await userDb.addUser(reqBody)
@@ -47,7 +47,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
 
 exports.updateUser = catchAsync(async (req, res, next) => {
   if (req.body.hasOwnProperty('password')) {
-    throw new AppError('This is not for password update!', 400)
+    throw new AppError(i18n.__('error.general.not_password_update'), 400)
   }
 
   const data = await userDb.updateUser(req.params.id, req.body)
@@ -65,7 +65,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
   const response = {
     success: true,
-    message: 'User deleted successfully',
+    message: i18n.__('success.user.deleted'),
     data
   }
 
