@@ -18,6 +18,9 @@ const AppError = require('./utils/appError')
 const app = express()
 const port = config.PORT || 3000
 const apiVersion = config.API_VERSION
+const appVersion = 'v1.0.0'
+
+console.log('App version :', appVersion)
 
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'logs', 'access.log'),
