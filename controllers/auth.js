@@ -1,5 +1,5 @@
 const i18n = require('i18n')
-const crypto = require('crypto')
+const crypto = require('../services/encrypt')
 
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
@@ -18,7 +18,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     throw new AppError(i18n.__('error.user.exists'), 422)
   }
 
-  reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
+  reqBody.confirmationCode = crypto()
   const data = await authDb.signup(reqBody).catch((err) => {
     console.log(err)
     throw new AppError(i18n.__('error.auth.sign_up_failed'), 502)
@@ -88,7 +88,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     throw new AppError(i18n.__('error.user.not_found'), 422)
   }
 
-  reqBody.confirmationCode = crypto.randomBytes(48).toString('hex')
+  reqBody.confirmationCode = crypto()
   const data = await userDb.updateUser(user.id, reqBody).then(() => {
     return authDb.forgotPassword(reqBody)
   })
