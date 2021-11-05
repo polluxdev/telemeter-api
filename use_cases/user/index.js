@@ -39,6 +39,10 @@ const getUser = async (userID) => {
 }
 
 const updateUser = async (userID, reqBody) => {
+  if (reqBody.hasOwnProperty('group')) {
+    reqBody['$push'] = { groups: { _id: reqBody.group } }
+  }
+
   return await User.findByIdAndUpdate(userID, reqBody, {
     new: true,
     runValidators: true

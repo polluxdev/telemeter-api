@@ -5,7 +5,8 @@ const _serializeSingle = (auth) => {
 
   return {
     id: auth._id,
-    token
+    token,
+    role: auth.role,
   }
 }
 

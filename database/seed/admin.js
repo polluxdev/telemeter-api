@@ -3,10 +3,10 @@ const User = require('../models/user')
 
 const seedDatabase = async function () {
   const root = {
-    email: 'root@root.com',
-    password: 'rootadmin',
-    name: 'Root',
-    role: 'root',
+    email: 'super@admin.com',
+    password: 'superadmin',
+    name: 'Super Admin',
+    role: 'super',
     active: true
   }
 

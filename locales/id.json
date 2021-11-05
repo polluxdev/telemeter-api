@@ -16,6 +16,9 @@
 		},
 		"user": {
 			"deleted": "Pengguna berhasil dihapus."
+		},
+		"group": {
+			"deleted": "Grup berhasil dihapus."
 		}
 	},
 	"error": {
