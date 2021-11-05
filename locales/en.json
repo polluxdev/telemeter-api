@@ -16,6 +16,9 @@
 		},
 		"user": {
 			"deleted": "User deleted successfully."
+		},
+		"group": {
+			"deleted": "Group deleted successfully."
 		}
 	},
 	"error": {

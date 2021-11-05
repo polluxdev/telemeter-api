@@ -31,12 +31,15 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['root', 'super', 'admin', 'user'],
+      enum: ['super', 'admin', 'user'],
       default: 'user'
     },
-    group: {
-      type: String
-    },
+    groups: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Group'
+      }
+    ],
     active: {
       type: Boolean,
       default: false
