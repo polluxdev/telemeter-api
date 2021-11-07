@@ -22,10 +22,12 @@ const userSchema = new Schema(
     phoneNumber: {
       type: String
     },
-    device: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Device'
-    },
+    devices: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Device'
+      }
+    ],
     confirmationCode: {
       type: String
     },
@@ -68,7 +70,11 @@ userSchema.pre('save', function (next) {
 })
 
 userSchema.pre('findOneAndUpdate', async function (next) {
-  if (!this._update.password && !this._update.confirmNewPassword) return next()
+  if (
+    !this._update ||
+    (!this._update.password && !this._update.confirmNewPassword)
+  )
+    return next()
 
   let password = this._update.confirmNewPassword || this._update.password
   this._update.password = await bcrypt.hash(password, 12)

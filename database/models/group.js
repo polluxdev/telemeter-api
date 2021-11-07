@@ -12,10 +12,12 @@ const groupSchema = new Schema(
     regionCode: {
       type: String
     },
-    admin: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User'
-    },
+    admin: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
+    ],
     users: [
       {
         type: mongoose.Schema.ObjectId,

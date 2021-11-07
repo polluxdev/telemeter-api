@@ -4,10 +4,11 @@ const _serializeSingle = (user) => {
     email: user.email,
     name: user.name,
     phoneNumber: user.phoneNumber,
-    device: user.device,
+    devices: user.devices,
     role: user.role,
-    group: user.group,
-    active: user.active
+    groups: user.groups,
+    active: user.active,
+    confirmationCode: user.confirmationCode
   }
 }
 

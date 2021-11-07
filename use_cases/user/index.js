@@ -63,7 +63,9 @@ const deleteUser = async (userID) => {
 }
 
 const checkUser = async (key, value) => {
-  return await User.findOne({ [key]: value }).exec()
+  return await User.findOne({ [key]: value })
+    .exec()
+    .then(serialize)
 }
 
 module.exports = {

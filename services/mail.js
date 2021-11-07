@@ -13,7 +13,6 @@ const transporter = nodemailer.createTransport({
 })
 
 const setEmailVerification = (reqBody) => {
-  const url = `${config.DOMAIN_APP}/register?key=${reqBody.confirmationCode}`
   const mailData = {
     from: config.APP_NAME,
     to: reqBody.email,
@@ -21,14 +20,13 @@ const setEmailVerification = (reqBody) => {
     text: 'That was easy!',
     html: `<b>Hey there! </b>
          <br> This is our first message sent with Nodemailer<br/>
-         <a href="${url}">link</a>`
+         <b>${reqBody.confirmationCode}</b>`
   }
 
   return transporter.sendMail(mailData)
 }
 
 const setEmailForgotPassword = (reqBody) => {
-  const url = `${config.DOMAIN_APP}/reset-password?key=${reqBody.confirmationCode}`
   const mailData = {
     from: config.APP_NAME,
     to: reqBody.email,
@@ -36,7 +34,7 @@ const setEmailForgotPassword = (reqBody) => {
     text: 'That was easy!',
     html: `<b>Hey there! </b>
          <br> This is our first message sent with Nodemailer<br/>
-         <a href="${url}">link</a>`
+         <b>${reqBody.confirmationCode}</b>`
   }
 
   return transporter.sendMail(mailData)

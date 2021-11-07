@@ -31,5 +31,7 @@ router.post(
   validate,
   authController.resetPassword
 )
+router.post('/validate-code', authController.validateCode)
+router.post('/send-code', authController.sendCode)
 
 module.exports = router

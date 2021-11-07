@@ -50,8 +50,8 @@
 			"not_found": "Pengguna tidak ditemukan.",
 			"not_exists": "Pengguna sudah tidak terdaftar."
 		},
-		"link": {
-			"expired": "Tautan kedaluwarsa."
+		"code": {
+			"used": "Kode sudah dipakai."
 		},
 		"device": {
 			"not_found_antares": "Perangkat tidak ditemukan di data antares."
