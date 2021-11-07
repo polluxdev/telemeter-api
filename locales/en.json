@@ -50,8 +50,8 @@
 			"not_found": "User not found.",
 			"not_exists": "User does no longer exists."
 		},
-		"link": {
-			"expired": "Link is expired."
+		"code": {
+			"used": "Code is already used."
 		},
 		"device": {
 			"not_found_antares": "Device not found in antares data."

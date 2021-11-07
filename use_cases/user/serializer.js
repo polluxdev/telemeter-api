@@ -7,7 +7,8 @@ const _serializeSingle = (user) => {
     devices: user.devices,
     role: user.role,
     groups: user.groups,
-    active: user.active
+    active: user.active,
+    confirmationCode: user.confirmationCode
   }
 }
 
