@@ -10,7 +10,9 @@ const {
 
 const router = express.Router()
 
-router.use(authMiddleware.protectRoute, authMiddleware.restrictTo('user'))
+router.patch('/users/:id', userController.updateUser)
+
+router.use(authMiddleware.restrictTo('user'))
 
 router.post(
   '/users',
@@ -21,7 +23,6 @@ router.post(
 )
 router.get('/users', userController.getUsers)
 router.get('/users/:id', userController.getUser)
-router.patch('/users/:id', userController.updateUser)
 router.delete('/users/:id', userController.deleteUser)
 
 module.exports = router

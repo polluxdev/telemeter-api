@@ -1,5 +1,5 @@
 const User = require('../../database/models/user')
-const serialize = require('./serializer')
+const { serialize } = require('./serializer')
 
 const addUser = async (reqBody) => {
   const newUser = {
@@ -7,6 +7,8 @@ const addUser = async (reqBody) => {
     password: reqBody.password,
     name: reqBody.name,
     phoneNumber: reqBody.phoneNumber,
+    role: reqBody.role,
+    group: reqBody.group,
     active: reqBody.active
   }
 
@@ -29,9 +31,7 @@ const getUsers = async (queryString) => {
     page: 'currentPage'
   }
 
-  return await User.paginate(query, { page, limit, customLabels }).then(
-    serialize
-  )
+  return await User.paginate(query, { page, limit, customLabels })
 }
 
 const getUser = async (userID) => {
@@ -63,9 +63,8 @@ const deleteUser = async (userID) => {
 }
 
 const checkUser = async (key, value) => {
-  return await User.findOne({ [key]: value })
-    .exec()
-    .then(serialize)
+  return await User.findOne({ [key]: value }).then(serialize)
+  // .exec()
 }
 
 module.exports = {

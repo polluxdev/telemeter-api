@@ -23,7 +23,7 @@ exports.addUsers = catchAsync(async (req, res, next) => {
 })
 
 exports.getUsers = catchAsync(async (req, res, next) => {
-  const query = { groups: req.user.groups, ...req.query }
+  const query = { group: req.user.group, ...req.query }
   const data = await userDb.getUsers(query)
 
   const response = {

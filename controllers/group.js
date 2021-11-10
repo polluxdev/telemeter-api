@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync')
 const groupDb = require('../use_cases/group')
+const userDb = require('../use_cases/user')
 
 exports.createGroup = catchAsync(async (req, res, next) => {
   req.body.admin = req.user.id
@@ -14,6 +15,10 @@ exports.createGroup = catchAsync(async (req, res, next) => {
 })
 
 exports.getGroups = catchAsync(async (req, res, next) => {
+  if (req.user.role != 'super') {
+    req.query.admin = req.user.id
+  }
+
   const data = await groupDb.getGroups(req.query)
 
   const response = {
@@ -37,7 +42,11 @@ exports.getGroup = catchAsync(async (req, res, next) => {
 })
 
 exports.updateGroup = catchAsync(async (req, res, next) => {
-  const data = await groupDb.updateGroup(req.params.id, req.body)
+  const reqBody = req.body
+  if (!reqBody.user && req.user.role != 'super') {
+    reqBody.user = req.user.id
+  }
+  const data = await groupDb.updateGroup(reqBody)
 
   const response = {
     success: true,
