@@ -43,6 +43,16 @@ groupSchema.pre(/^find/, function (next) {
   next()
 })
 
+groupSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject()
+  const group = {
+    id: _id,
+    ...object
+  }
+  
+  return group
+})
+
 const Group = mongoose.model('Group', groupSchema)
 
 module.exports = Group

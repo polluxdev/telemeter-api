@@ -28,6 +28,16 @@ const meterSchema = new Schema(
 
 meterSchema.plugin(mongoosePaginate)
 
+meterSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject()
+  const meter = {
+    id: _id,
+    ...object
+  }
+  
+  return meter
+})
+
 const Meter = mongoose.model('Meter', meterSchema)
 
 module.exports = Meter

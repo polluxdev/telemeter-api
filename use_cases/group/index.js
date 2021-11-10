@@ -1,8 +1,6 @@
-const i18n = require('i18n')
-
 const Group = require('../../database/models/group')
+const User = require('../../database/models/user')
 const serialize = require('./serializer')
-const AppError = require('../../utils/appError')
 const { randomString } = require('../../services/generator')
 
 const createGroup = async (reqBody) => {
@@ -13,7 +11,17 @@ const createGroup = async (reqBody) => {
     admin: reqBody.admin
   }
 
-  return await Group.create(newGroup).then(serialize)
+  const group = await Group.create(newGroup).then(async (group) => {
+    await User.findByIdAndUpdate(reqBody.admin, {
+      role: 'admin',
+      group: group.id,
+      active: false
+    })
+
+    return group
+  })
+
+  return await Group.populate(group, { path: 'admin users' })
 }
 
 const getGroups = async (queryString) => {
@@ -32,24 +40,40 @@ const getGroups = async (queryString) => {
     page: 'currentPage'
   }
 
-  return await Group.paginate(query, { page, limit, customLabels }).then(
-    serialize
-  )
+  return await Group.paginate(query, {
+    populate: 'admin users',
+    page,
+    limit,
+    customLabels
+  }).then(serialize)
 }
 
 const getGroup = async (groupID) => {
   return await Group.findById(groupID).then(serialize)
 }
 
-const updateGroup = async (groupID, reqBody) => {
+const updateGroup = async (reqBody) => {
   if (reqBody.hasOwnProperty('user')) {
     reqBody['$push'] = { users: { _id: reqBody.user } }
   }
 
-  return await Group.findByIdAndUpdate(groupID, reqBody, {
+  if (reqBody.hasOwnProperty('regionCode')) {
+    return await Group.findOneAndUpdate(
+      { regionCode: reqBody.regionCode },
+      reqBody
+    )
+  }
+
+  const { id, admin, ...req } = reqBody
+
+  return await Group.findByIdAndUpdate(id, req, {
     new: true,
     runValidators: true
-  }).then(serialize)
+  }).then(async (group) => {
+    await User.findByIdAndUpdate(admin, req)
+
+    return group
+  })
 }
 
 const deleteGroup = async (groupID) => {

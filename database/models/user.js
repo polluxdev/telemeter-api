@@ -36,12 +36,10 @@ const userSchema = new Schema(
       enum: ['super', 'admin', 'user'],
       default: 'user'
     },
-    groups: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Group'
-      }
-    ],
+    group: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Group'
+    },
     active: {
       type: Boolean,
       default: false
@@ -86,6 +84,18 @@ userSchema.pre(/^find/, function (next) {
   this.find({ deletedAt: { $exists: false } })
 
   next()
+})
+
+userSchema.method('toJSON', function () {
+  const { __v, _id, createdAt, updatedAt, ...object } = this.toObject()
+  const user = {
+    id: _id,
+    ...object,
+    createdAt: createdAt,
+    updatedAt: updatedAt
+  }
+
+  return user
 })
 
 userSchema.methods.correctPassword = async function (password, userPassword) {

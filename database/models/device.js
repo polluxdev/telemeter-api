@@ -33,6 +33,16 @@ deviceSchema.pre(/^find/, function (next) {
   next()
 })
 
+deviceSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject()
+  const device = {
+    id: _id,
+    ...object
+  }
+  
+  return device
+})
+
 const Device = mongoose.model('Device', deviceSchema)
 
 module.exports = Device
