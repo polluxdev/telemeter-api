@@ -51,6 +51,9 @@ const userSchema = new Schema(
   { timestamps: true }
 )
 
+userSchema.set('toJSON', { virtuals: true })
+userSchema.set('toObject', { virtuals: true })
+
 userSchema.plugin(mongoosePaginate)
 
 userSchema.pre('save', async function (next) {
@@ -90,9 +93,7 @@ userSchema.method('toJSON', function () {
   const { __v, _id, createdAt, updatedAt, ...object } = this.toObject()
   const user = {
     id: _id,
-    ...object,
-    createdAt: createdAt,
-    updatedAt: updatedAt
+    ...object
   }
 
   return user

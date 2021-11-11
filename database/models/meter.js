@@ -26,6 +26,9 @@ const meterSchema = new Schema(
   { timestamps: true }
 )
 
+meterSchema.set('toJSON', { virtuals: true })
+meterSchema.set('toObject', { virtuals: true })
+
 meterSchema.plugin(mongoosePaginate)
 
 meterSchema.method('toJSON', function () {
