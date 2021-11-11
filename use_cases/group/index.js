@@ -61,7 +61,13 @@ const updateGroup = async (reqBody) => {
     return await Group.findOneAndUpdate(
       { regionCode: reqBody.regionCode },
       reqBody
-    )
+    ).then(async (group) => {
+      await User.findByIdAndUpdate(reqBody.user, {
+        group: group.id
+      })
+
+      return await User.findById(reqBody.user).populate('group')
+    })
   }
 
   const { id, admin, ...req } = reqBody
@@ -69,11 +75,13 @@ const updateGroup = async (reqBody) => {
   return await Group.findByIdAndUpdate(id, req, {
     new: true,
     runValidators: true
-  }).then(async (group) => {
-    await User.findByIdAndUpdate(admin, req)
-
-    return group
   })
+    .populate('admin users')
+    .then(async (group) => {
+      await User.findByIdAndUpdate(admin, req)
+
+      return group
+    })
 }
 
 const deleteGroup = async (groupID) => {

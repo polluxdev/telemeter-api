@@ -8,11 +8,7 @@ const router = express.Router()
 router.post('/groups', groupController.createGroup)
 router.get('/groups', groupController.getGroups)
 router.get('/groups/:id', groupController.getGroup)
-router.patch(
-  '/groups',
-  authMiddleware.restrictTo('user'),
-  groupController.updateGroup
-)
+router.patch('/groups', groupController.updateGroup)
 router.delete(
   '/groups/:id',
   authMiddleware.restrictTo('user'),
