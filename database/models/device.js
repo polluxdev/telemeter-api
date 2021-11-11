@@ -25,6 +25,9 @@ const deviceSchema = new Schema(
   { timestamps: true }
 )
 
+deviceSchema.set('toJSON', { virtuals: true })
+deviceSchema.set('toObject', { virtuals: true })
+
 deviceSchema.plugin(mongoosePaginate)
 
 deviceSchema.pre(/^find/, function (next) {

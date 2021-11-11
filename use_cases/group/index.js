@@ -49,7 +49,7 @@ const getGroups = async (queryString) => {
 }
 
 const getGroup = async (groupID) => {
-  return await Group.findById(groupID).then(serialize)
+  return await Group.findById(groupID).populate('admin users')
 }
 
 const updateGroup = async (reqBody) => {

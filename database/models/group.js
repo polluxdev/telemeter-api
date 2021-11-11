@@ -35,6 +35,9 @@ const groupSchema = new Schema(
   { timestamps: true }
 )
 
+groupSchema.set('toJSON', { virtuals: true })
+groupSchema.set('toObject', { virtuals: true })
+
 groupSchema.plugin(mongoosePaginate)
 
 groupSchema.pre(/^find/, function (next) {
@@ -49,7 +52,7 @@ groupSchema.method('toJSON', function () {
     id: _id,
     ...object
   }
-  
+
   return group
 })
 
