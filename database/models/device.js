@@ -18,6 +18,10 @@ const deviceSchema = new Schema(
       type: Boolean,
       default: true
     },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    },
     deletedAt: {
       type: Date
     }
@@ -42,7 +46,7 @@ deviceSchema.method('toJSON', function () {
     id: _id,
     ...object
   }
-  
+
   return device
 })
 

@@ -13,24 +13,22 @@ const createDevice = async (reqBody) => {
     name = reqBody.name
   }
 
-  return await Device.create({ name })
-    .then(async (device) => {
-      await antares.post(
-        '/',
-        {
-          'm2m:cnt': {
-            rn: device.name
-          }
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json;ty=3'
-          }
+  return await Device.create({ name }).then(async (device) => {
+    await antares.post(
+      '/',
+      {
+        'm2m:cnt': {
+          rn: device.name
         }
-      )
-      return device
-    })
-    .then(serialize)
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json;ty=3'
+        }
+      }
+    )
+    return device
+  })
 }
 
 const getDevices = async (queryString) => {
@@ -55,28 +53,26 @@ const getDevices = async (queryString) => {
 }
 
 const getDevice = async (deviceID) => {
-  return await Device.findById(deviceID)
-    .then(async (device) => {
-      await antares
-        .get(`/${device.name}`, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .catch(() => {
-          throw new AppError(i18n.__('error.device.not_found_antares'), 422)
-        })
+  return await Device.findById(deviceID).then(async (device) => {
+    await antares
+      .get(`/${device.name}`, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .catch(() => {
+        throw new AppError(i18n.__('error.device.not_found_antares'), 422)
+      })
 
-      return device
-    })
-    .then(serialize)
+    return device
+  })
 }
 
 const updateDevice = async (deviceID, reqBody) => {
   return await Device.findByIdAndUpdate(deviceID, reqBody, {
     new: true,
     runValidators: true
-  }).then(serialize)
+  })
 }
 
 const deleteDevice = async (deviceID) => {
@@ -89,7 +85,7 @@ const deleteDevice = async (deviceID) => {
       new: true,
       runValidators: true
     }
-  ).then(serialize)
+  )
 }
 
 module.exports = {

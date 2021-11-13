@@ -18,6 +18,7 @@ const login = async (reqBody) => {
 
   return await User.findOne({ ['email']: email })
     .select('+password')
+    .populate('group')
     .then(async (user) => {
       if (!user || !(await user.correctPassword(password, user.password))) {
         throw new AppError(i18n.__('error.auth.wrong_email_password'), 401)

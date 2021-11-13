@@ -12,7 +12,7 @@ const addUser = async (reqBody) => {
     active: reqBody.active
   }
 
-  return await User.create(newUser).then(serialize)
+  return await User.create(newUser)
 }
 
 const getUsers = async (queryString) => {
@@ -31,11 +31,16 @@ const getUsers = async (queryString) => {
     page: 'currentPage'
   }
 
-  return await User.paginate(query, { page, limit, customLabels })
+  return await User.paginate(query, {
+    populate: 'group device',
+    page,
+    limit,
+    customLabels
+  })
 }
 
 const getUser = async (userID) => {
-  return await User.findById(userID).then(serialize)
+  return await User.findById(userID)
 }
 
 const updateUser = async (userID, reqBody) => {
@@ -46,7 +51,7 @@ const updateUser = async (userID, reqBody) => {
   return await User.findByIdAndUpdate(userID, reqBody, {
     new: true,
     runValidators: true
-  }).then(serialize)
+  })
 }
 
 const deleteUser = async (userID) => {
@@ -59,12 +64,11 @@ const deleteUser = async (userID) => {
       new: true,
       runValidators: true
     }
-  ).then(serialize)
+  )
 }
 
 const checkUser = async (key, value) => {
-  return await User.findOne({ [key]: value }).then(serialize)
-  // .exec()
+  return await User.findOne({ [key]: value })
 }
 
 module.exports = {

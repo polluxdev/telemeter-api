@@ -22,12 +22,10 @@ const userSchema = new Schema(
     phoneNumber: {
       type: String
     },
-    devices: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Device'
-      }
-    ],
+    device: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Device'
+    },
     confirmationCode: {
       type: String
     },

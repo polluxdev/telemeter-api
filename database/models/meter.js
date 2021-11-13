@@ -10,6 +10,10 @@ const meterSchema = new Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Device'
     },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    },
     valveStat: {
       type: String,
       default: 'ON'
@@ -37,7 +41,7 @@ meterSchema.method('toJSON', function () {
     id: _id,
     ...object
   }
-  
+
   return meter
 })
 
