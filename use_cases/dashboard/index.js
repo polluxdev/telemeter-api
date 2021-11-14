@@ -49,7 +49,39 @@ const getMeterTotal = async (queryString) => {
   ])
 }
 
+const getTopUsage = async (queryString) => {
+  const { group, limit = 5 } = queryString
+  const match = Object.create({})
+  if (group) {
+    match['user.group'] = group
+  }
+
+  return Meter.aggregate([
+    { $sort: { totalUsage: -1 } },
+    { $limit: parseInt(limit) },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    { $match: match },
+    {
+      $project: {
+        _id: 0,
+        totalUsage: 1,
+        userID: { $arrayElemAt: ['$user._id', 0] },
+        userName: { $arrayElemAt: ['$user.name', 0] },
+        userRole: { $arrayElemAt: ['$user.role', 0] }
+      }
+    }
+  ])
+}
+
 module.exports = {
   getUsersCount,
-  getMeterTotal
+  getMeterTotal,
+  getTopUsage
 }
