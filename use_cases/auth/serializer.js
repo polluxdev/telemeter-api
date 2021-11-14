@@ -3,11 +3,22 @@ const { generateToken } = require('../../services/auth')
 const _serializeSingle = (auth) => {
   const token = generateToken(auth._id, auth.email)
 
-  return {
+  const response = {
     id: auth._id,
     token,
-    role: auth.role,
+    role: auth.role
   }
+
+  if (auth.group) {
+    response['group'] = {
+      id: auth.group.id,
+      regionName: auth.group.regionName,
+      regionCode: auth.group.regionCode,
+      active: auth.group.active
+    }
+  }
+
+  return response
 }
 
 const _serializeLink = (auth) => {

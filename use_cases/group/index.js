@@ -45,7 +45,7 @@ const getGroups = async (queryString) => {
     page,
     limit,
     customLabels
-  }).then(serialize)
+  })
 }
 
 const getGroup = async (groupID) => {
@@ -94,7 +94,7 @@ const deleteGroup = async (groupID) => {
       new: true,
       runValidators: true
     }
-  ).then(serialize)
+  )
 }
 
 module.exports = {

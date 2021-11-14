@@ -19,7 +19,6 @@ const checkUser = async (userID, reqBody) => {
 
       return user
     })
-    .then(serialize)
 }
 
 module.exports = { checkUser }
