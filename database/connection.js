@@ -1,5 +1,7 @@
-const config = require('../config')
+const i18n = require('i18n')
 const mongoose = require('mongoose')
+
+const config = require('../config')
 
 mongoose.Promise = global.Promise
 
@@ -15,31 +17,31 @@ if (config.NODE_ENV === 'development') {
   mongoose
     .connect(localUri, options)
     .then(() => {
-      console.log('CONNECTED TO MONGODB!')
+      console.log(i18n.__('success.database.connected'))
     })
     .catch(() => {
-      console.error('FAILED TO CONNECT TO MONGODB!')
+      console.error(i18n.__('success.database.failed_connect'))
     })
 } else {
   mongoose
     .connect(atlasUri, options)
     .then(() => {
-      console.log('CONNECTED TO MONGODB!')
+      console.log(i18n.__('error.database.connected_atlas'))
     })
     .catch(() => {
-      console.error('FAILED TO CONNECT TO MONGODB!')
+      console.error(i18n.__('error.database.failed_connect_atlas'))
     })
 }
 
 mongoose.connection
   .once('open', function () {
-    console.log('Connection has been made')
+    console.log(i18n.__('success.database.open'))
   })
   .on('error', function (error) {
-    console.log('Connect error', error)
+    console.log(i18n.__('error.database.connect_error'), error)
   })
   .on('disconnected', function () {
-    console.log('Connection disconnected')
+    console.log(i18n.__('error.database.disconnected'))
   })
 
 module.exports = mongoose

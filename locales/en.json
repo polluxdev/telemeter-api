@@ -19,6 +19,11 @@
 		},
 		"group": {
 			"deleted": "Group deleted successfully."
+		},
+		"database": {
+			"connected": "CONNECTED TO MONGODB!",
+			"connected_atlas": "CONNECTED TO MONGODB ATLAS!",
+			"open": "Connection has been made"
 		}
 	},
 	"error": {
@@ -69,6 +74,12 @@
 				"email_format": "Email is not valid.",
 				"password_not_match": "Confirm password does not match password."
 			}
+		},
+		"database": {
+			"failed_connect": "FAILED TO CONNECT TO MONGODB!",
+			"failed_connect_atlas": "FAILED TO CONNECT TO MONGODB ATLAS!",
+			"connect_error": "Connect error",
+			"disconnected": "Connection disconnected"
 		}
 	}
 }

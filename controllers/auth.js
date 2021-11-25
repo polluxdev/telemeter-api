@@ -1,5 +1,4 @@
 const i18n = require('i18n')
-const { randomString } = require('../services/generator')
 
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
@@ -9,6 +8,7 @@ const userDb = require('../use_cases/user')
 
 const email = require('../services/mail')
 const authService = require('../services/auth')
+const { randomString } = require('../services/generator')
 
 exports.signup = catchAsync(async (req, res, next) => {
   const reqBody = req.body

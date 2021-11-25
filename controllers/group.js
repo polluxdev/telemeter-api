@@ -1,6 +1,5 @@
 const catchAsync = require('../utils/catchAsync')
 const groupDb = require('../use_cases/group')
-const userDb = require('../use_cases/user')
 
 exports.createGroup = catchAsync(async (req, res, next) => {
   req.body.admin = req.user.id

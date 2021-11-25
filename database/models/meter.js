@@ -16,13 +16,23 @@ const meterSchema = new Schema(
     },
     valveStat: {
       type: String,
+      enum: ['ON', 'OFF'],
       default: 'ON'
     },
     batteryStat: {
       type: String,
+      enum: ['OK', 'ERR'],
       default: 'OK'
     },
-    totalUsage: {
+    waterUsage: {
+      type: Number,
+      default: 0
+    },
+    currentTemperature: {
+      type: Number,
+      default: 0
+    },
+    currentHumidity: {
       type: Number,
       default: 0
     }

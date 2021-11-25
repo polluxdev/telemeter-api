@@ -13,22 +13,24 @@ const createDevice = async (reqBody) => {
     name = reqBody.name
   }
 
-  return await Device.create({ name }).then(async (device) => {
-    await antares.post(
-      '/',
-      {
-        'm2m:cnt': {
-          rn: device.name
-        }
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json;ty=3'
-        }
+  const data = await antares.post(
+    '/',
+    {
+      'm2m:cnt': {
+        rn: name
       }
-    )
-    return device
-  })
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json;ty=3'
+      }
+    }
+  )
+
+  const res = data.data['m2m:cnt']
+  const str = res.ri.split('/')
+
+  return await Device.create({ name: res.rn, code: str[2] })
 }
 
 const getDevices = async (queryString) => {

@@ -19,6 +19,11 @@
 		},
 		"group": {
 			"deleted": "Grup berhasil dihapus."
+		},
+		"database": {
+			"connected": "TERHUBUNG KE MONGODB!",
+			"connected_atlas": "TERHUBUNG KE MONGODB ATLAS!",
+			"open": "Koneksi berhasil dibuat"
 		}
 	},
 	"error": {
@@ -69,6 +74,12 @@
 				"email_format": "Email tidak valid.",
 				"password_not_match": "Konfirmasi kata sandi tidak cocok dengan kata sandi."
 			}
+		},
+		"database": {
+			"failed_connect": "GAGAL TERHUBUNG KE MONGODB!",
+			"failed_connect_atlas": "GAGAL TERHUBUNG KE MONGODB ATLAS!",
+			"connect_error": "Koneksi error",
+			"disconnected": "Koneksi terputus"
 		}
 	}
 }

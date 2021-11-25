@@ -1,6 +1,5 @@
 const i18n = require('i18n')
 
-const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
 const deviceDb = require('../use_cases/device')
 
