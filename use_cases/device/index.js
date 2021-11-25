@@ -2,6 +2,7 @@ const i18n = require('i18n')
 
 const uuid = require('../../services/uuid')
 const antares = require('../../services/antares')
+const { deviceCode } = require('../../services/generator')
 
 const Device = require('../../database/models/device')
 const serialize = require('./serializer')
@@ -27,10 +28,9 @@ const createDevice = async (reqBody) => {
     }
   )
 
-  const res = data.data['m2m:cnt']
-  const str = res.ri.split('/')
+  const code = deviceCode(data.data['m2m:cnt'], 'ri')
 
-  return await Device.create({ name: res.rn, code: str[2] })
+  return await Device.create({ name, code })
 }
 
 const getDevices = async (queryString) => {

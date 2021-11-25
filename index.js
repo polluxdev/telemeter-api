@@ -15,6 +15,7 @@ const config = require('./config')
 const routes = require('./routes')
 const AppError = require('./utils/appError')
 const authService = require('./services/auth')
+const mqttHandler = require('./services/mqtt')
 
 const app = express()
 const port = config.PORT || 3000
@@ -22,6 +23,18 @@ const apiVersion = config.API_VERSION
 const appVersion = 'v1.0.0'
 
 console.log('App version :', appVersion)
+
+const mqttClient = new mqttHandler()
+mqttClient.connect()
+
+app.post('/send-mqtt', function (req, res) {
+  mqttClient.sendMessage(req.body)
+
+  res.status(200).json({
+    success: true,
+    message: 'Message sent to mqtt'
+  })
+})
 
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'logs', 'access.log'),
