@@ -2,6 +2,7 @@ const i18n = require('i18n')
 
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
+
 const profileDb = require('../use_cases/profile')
 const userDb = require('../use_cases/user')
 

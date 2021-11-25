@@ -2,6 +2,7 @@ const i18n = require('i18n')
 
 const uuid = require('../../services/uuid')
 const antares = require('../../services/antares')
+const { deviceCode } = require('../../services/generator')
 
 const Device = require('../../database/models/device')
 const serialize = require('./serializer')
@@ -13,22 +14,23 @@ const createDevice = async (reqBody) => {
     name = reqBody.name
   }
 
-  return await Device.create({ name }).then(async (device) => {
-    await antares.post(
-      '/',
-      {
-        'm2m:cnt': {
-          rn: device.name
-        }
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json;ty=3'
-        }
+  const data = await antares.post(
+    '/',
+    {
+      'm2m:cnt': {
+        rn: name
       }
-    )
-    return device
-  })
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json;ty=3'
+      }
+    }
+  )
+
+  const code = deviceCode(data.data['m2m:cnt'], 'ri')
+
+  return await Device.create({ name, code })
 }
 
 const getDevices = async (queryString) => {

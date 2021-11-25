@@ -24,7 +24,11 @@ module.exports = {
   antares: {
     ANTARES_ACCESS_KEY: process.env.ANTARES_ACCESS_KEY,
     ANTARES_APPLICATION_NAME: process.env.ANTARES_APPLICATION_NAME,
-    ANTARES_URL: process.env.ANTARES_URL
+    ANTARES_URL: process.env.ANTARES_URL,
+    ANTARES_MQTT_HOST: process.env.ANTARES_MQTT_HOST,
+    ANTARES_MQTT_PORT: process.env.ANTARES_MQTT_PORT,
+    ANTARES_MQTT_TOPIC_RESP: process.env.ANTARES_MQTT_TOPIC_RESP,
+    ANTARES_MQTT_TOPIC_REQ: process.env.ANTARES_MQTT_TOPIC_REQ
   },
   mail: {
     MAIL_HOST: process.env.MAIL_HOST,

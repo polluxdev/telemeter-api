@@ -6,6 +6,10 @@ const Schema = mongoose.Schema
 
 const deviceSchema = new Schema(
   {
+    code: {
+      type: String,
+      required: true
+    },
     name: {
       type: String,
       required: true
