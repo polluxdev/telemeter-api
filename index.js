@@ -27,15 +27,6 @@ console.log('App version :', appVersion)
 const mqttClient = new mqttHandler()
 mqttClient.connect()
 
-app.post('/send-mqtt', function (req, res) {
-  mqttClient.sendMessage(req.body)
-
-  res.status(200).json({
-    success: true,
-    message: 'Message sent to mqtt'
-  })
-})
-
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'logs', 'access.log'),
   { flags: 'a' }
@@ -86,6 +77,16 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
 app.use(mongoSanitize())
+
+app.post('/send-mqtt', (req, res, next) => {
+  mqttClient.sendMessage(req.body)
+
+  res.status(200).json({
+    success: true,
+    message: 'Message sent to mqtt',
+    data: JSON.parse(req.body['m2m:rqp'].pc['m2m:cin'].con)
+  })
+})
 
 app.use((req, res, next) => {
   if (req.cookies.lang) {

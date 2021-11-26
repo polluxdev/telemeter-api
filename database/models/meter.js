@@ -1,6 +1,7 @@
 const mongoosePaginate = require('mongoose-paginate-v2')
 
 const mongoose = require('../connection')
+const { parseDate } = require('../../services/date')
 
 const Schema = mongoose.Schema
 
@@ -46,10 +47,12 @@ meterSchema.set('toObject', { virtuals: true })
 meterSchema.plugin(mongoosePaginate)
 
 meterSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject()
+  const { __v, _id, createdAt, updatedAt, ...object } = this.toObject()
   const meter = {
     id: _id,
-    ...object
+    ...object,
+    createdAt: parseDate(createdAt),
+    updatedAt: parseDate(updatedAt)
   }
 
   return meter

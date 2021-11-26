@@ -11,18 +11,25 @@ const {
 const router = express.Router()
 
 router.patch('/users/:id', userController.updateUser)
-
-router.use(authMiddleware.restrictTo('user'))
+router.get('/users', userController.getUsers)
 
 router.post(
   '/users',
   emailValidationRules(),
   userValidationRules(),
   validate,
+  authMiddleware.restrictTo('user'),
   userController.addUsers
 )
-router.get('/users', userController.getUsers)
-router.get('/users/:id', userController.getUser)
-router.delete('/users/:id', userController.deleteUser)
+router.get(
+  '/users/:id',
+  authMiddleware.restrictTo('user'),
+  userController.getUser
+)
+router.delete(
+  '/users/:id',
+  authMiddleware.restrictTo('user'),
+  userController.deleteUser
+)
 
 module.exports = router
