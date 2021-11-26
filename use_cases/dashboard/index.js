@@ -33,9 +33,9 @@ const getMeterTotal = async (queryString) => {
     {
       $group: {
         _id: null,
-        totalUsage: { $sum: '$totalUsage' },
-        maxUsage: { $max: '$totalUsage' },
-        minUsage: { $min: '$totalUsage' }
+        totalUsage: { $sum: '$waterUsage' },
+        maxUsage: { $max: '$waterUsage' },
+        minUsage: { $min: '$waterUsage' }
       }
     },
     {

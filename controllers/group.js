@@ -14,8 +14,8 @@ exports.createGroup = catchAsync(async (req, res, next) => {
 })
 
 exports.getGroups = catchAsync(async (req, res, next) => {
-  if (req.user.role != 'super') {
-    req.query.admin = req.user.id
+  if (!req.query.active) {
+    req.query.active = true
   }
 
   const data = await groupDb.getGroups(req.query)

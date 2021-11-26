@@ -78,7 +78,7 @@ const updateGroup = async (reqBody) => {
   })
     .populate('admin users')
     .then(async (group) => {
-      await User.findByIdAndUpdate(admin, req)
+      await User.findByIdAndUpdate(group.admin[0].id, req)
 
       return group
     })

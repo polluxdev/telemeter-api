@@ -1,5 +1,6 @@
 const User = require('../../database/models/user')
 const deviceDb = require('../device/index')
+const groupDb = require('../group/index')
 const { serialize } = require('./serializer')
 
 const addUser = async (reqBody) => {
@@ -46,7 +47,8 @@ const getUser = async (userID) => {
 
 const updateUser = async (userID, reqBody) => {
   if (reqBody.hasOwnProperty('group')) {
-    reqBody['$push'] = { groups: { _id: reqBody.group } }
+    reqBody.active = false
+    await groupDb.updateGroup({ id: reqBody.group, user: userID })
   }
 
   if (reqBody.hasOwnProperty('device')) {

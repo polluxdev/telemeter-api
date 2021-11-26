@@ -2,8 +2,8 @@ const User = require('../models/user')
 
 const userSeed = async () => {
   const superAdmin = {
-    email: 'super@admin.com',
-    password: 'superadmin',
+    email: 'super@super.com',
+    password: 'supersuper',
     name: 'Super Admin',
     role: 'super',
     active: true
