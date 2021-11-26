@@ -69,8 +69,8 @@ class MqttHandler {
             waterUsage: meter.wu,
             currentTemperature: meter.ct,
             currentHumidity: meter.ch
-          }).then(() => {
-            console.log(`Save Meter Successfully: ${this.model}`)
+          }).then((meter) => {
+            console.log(`Save Meter Successfully:`, meter)
             this.model = {}
           })
         })

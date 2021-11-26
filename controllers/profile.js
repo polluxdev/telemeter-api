@@ -37,12 +37,14 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     throw new AppError(i18n.__('error.general.for_password_update'), 400)
   }
 
-  const user = await profileDb.checkUser(req.params.id, req.body)
+  const user = await profileDb.checkUser(req.user.id, req.body)
   if (!user) {
     throw new AppError(i18n.__('error.user.not_found'), 422)
   }
 
-  const data = await userDb.updateUser(req.user.id, req.body)
+  const data = await userDb.updateUser(req.user.id, {
+    password: req.body.confirmNewPassword
+  })
 
   const response = {
     success: true,

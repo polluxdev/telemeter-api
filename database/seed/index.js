@@ -1,37 +1,28 @@
 const mongoose = require('../connection')
-const User = require('../models/user')
+
+const deviceSeed = require('./device')
+const groupSeed = require('./group')
+const meterSeed = require('./meter')
+const userSeed = require('./user')
+const deviceUserSeed = require('./deviceUser')
+const groupUserSeed = require('./groupUser')
 
 const seedDatabase = async function () {
-  const users = [
-    {
-      email: 'super@admin.com',
-      password: 'superadmin',
-      name: 'Super Admin',
-      role: 'super',
-      active: true
-    },
-    {
-      email: 'admin@admin.com',
-      password: 'adminadmin',
-      name: 'Admin',
-      role: 'admin',
-      active: true
-    },
-    {
-      email: 'user@user.com',
-      password: 'useruser',
-      name: 'User',
-      role: 'user',
-      active: true
-    }
-  ]
+  await deviceSeed()
+  await groupSeed()
+  await userSeed()
+}
 
-  await User.insertMany(users)
+const updateSeed = async function () {
+  await deviceUserSeed()
+  await groupUserSeed()
+  await meterSeed()
 }
 
 const seedDB = async () => {
-  await User.deleteMany({})
+  mongoose.connection.dropDatabase()
   await seedDatabase()
+  await updateSeed()
 }
 
 seedDB().then(() => {
