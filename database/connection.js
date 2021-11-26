@@ -25,10 +25,10 @@ if (config.NODE_ENV === 'development') {
   mongoose
     .connect(atlasUri, options)
     .then(() => {
-      console.log('CONNECTED TO MONGODB!')
+      console.log('CONNECTED TO MONGODB ATLAS!')
     })
     .catch(() => {
-      console.error('FAILED TO CONNECT TO MONGODB!')
+      console.error('FAILED TO CONNECT TO MONGODB ATLAS!')
     })
 }
 

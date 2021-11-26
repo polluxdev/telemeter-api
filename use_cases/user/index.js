@@ -1,4 +1,5 @@
 const User = require('../../database/models/user')
+const deviceDb = require('../device/index')
 const { serialize } = require('./serializer')
 
 const addUser = async (reqBody) => {
@@ -46,6 +47,16 @@ const getUser = async (userID) => {
 const updateUser = async (userID, reqBody) => {
   if (reqBody.hasOwnProperty('group')) {
     reqBody['$push'] = { groups: { _id: reqBody.group } }
+  }
+
+  if (reqBody.hasOwnProperty('device')) {
+    return await User.findByIdAndUpdate(userID, reqBody, {
+      new: true,
+      runValidators: true
+    }).then(async (user) => {
+      await deviceDb.updateDevice(reqBody.device, { user: user.id })
+      return user
+    })
   }
 
   return await User.findByIdAndUpdate(userID, reqBody, {
