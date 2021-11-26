@@ -84,7 +84,10 @@ class MqttHandler {
 
   // Sends a mqtt message to topic: mytopic
   sendMessage(message) {
-    this.mqttClient.publish(config.antares.ANTARES_MQTT_TOPIC_REQ, message)
+    this.mqttClient.publish(
+      config.antares.ANTARES_MQTT_TOPIC_REQ,
+      JSON.stringify(message)
+    )
   }
 }
 
