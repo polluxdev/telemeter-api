@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const mongoosePaginate = require('mongoose-paginate-v2')
 
 const mongoose = require('../connection')
+const { parseDate } = require('../../services/date')
 
 const Schema = mongoose.Schema
 
@@ -91,7 +92,9 @@ userSchema.method('toJSON', function () {
   const { __v, _id, createdAt, updatedAt, ...object } = this.toObject()
   const user = {
     id: _id,
-    ...object
+    ...object,
+    createdAt: parseDate(createdAt),
+    updatedAt: parseDate(updatedAt)
   }
 
   return user

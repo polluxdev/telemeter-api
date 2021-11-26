@@ -1,6 +1,7 @@
 const mongoosePaginate = require('mongoose-paginate-v2')
 
 const mongoose = require('../connection')
+const { parseDate } = require('../../services/date')
 
 const Schema = mongoose.Schema
 
@@ -47,10 +48,12 @@ groupSchema.pre(/^find/, function (next) {
 })
 
 groupSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject()
+  const { __v, _id, createdAt, updatedAt, ...object } = this.toObject()
   const group = {
     id: _id,
-    ...object
+    ...object,
+    createdAt: parseDate(createdAt),
+    updatedAt: parseDate(updatedAt)
   }
 
   return group
