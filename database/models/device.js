@@ -15,10 +15,6 @@ const deviceSchema = new Schema(
       type: String,
       required: true
     },
-    batteryStat: {
-      type: String,
-      default: 'OK'
-    },
     active: {
       type: Boolean,
       default: true

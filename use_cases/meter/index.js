@@ -19,6 +19,11 @@ const getMeters = async (queryString) => {
   return await Meter.paginate(query, { page, limit, customLabels })
 }
 
+const getMeter = async (param) => {
+  return await Meter.findOne(param).sort({ createdAt: -1 })
+}
+
 module.exports = {
-  getMeters
+  getMeters,
+  getMeter
 }

@@ -48,7 +48,8 @@
 		},
 		"email": {
 			"send_failed": "Send email has failed.",
-			"already_registered": "Email has already registered."
+			"already_registered": "Email has already registered.",
+			"not_registered": "Email not registered."
 		},
 		"user": {
 			"already_exists": "User already exists.",

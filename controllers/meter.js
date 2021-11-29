@@ -14,3 +14,18 @@ exports.getMeters = catchAsync(async (req, res, next) => {
 
   res.status(200).json(response)
 })
+
+exports.getMeter = catchAsync(async (req, res, next) => {
+  const param = {
+    user: req.user.id,
+    device: req.user.device
+  }
+  const data = await meterDb.getMeter(param)
+
+  const response = {
+    success: true,
+    data
+  }
+
+  res.status(200).json(response)
+})

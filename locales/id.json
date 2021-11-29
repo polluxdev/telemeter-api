@@ -48,7 +48,8 @@
 		},
 		"email": {
 			"send_failed": "Gagal mengirim email.",
-			"already_registered": "Email sudah terdaftar."
+			"already_registered": "Email sudah terdaftar.",
+			"not_registered": "Email belum terdaftar."
 		},
 		"user": {
 			"already_exists": "Pengguna sudah terdaftar.",
