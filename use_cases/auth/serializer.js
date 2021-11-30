@@ -18,6 +18,15 @@ const _serializeSingle = (auth) => {
     }
   }
 
+  if (auth.device) {
+    response['device'] = {
+      id: auth.device.id,
+      code: auth.device.code,
+      name: auth.device.name,
+      active: auth.device.active
+    }
+  }
+
   return response
 }
 

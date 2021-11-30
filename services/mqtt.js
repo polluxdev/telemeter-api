@@ -5,6 +5,8 @@ const config = require('../config')
 const Device = require('../database/models/device')
 const Meter = require('../database/models/meter')
 
+const AppError = require('../utils/appError')
+
 const { deviceCode } = require('./generator')
 
 const meterProps = ['vs', 'bs', 'ct', 'ch', 'wu']
@@ -60,20 +62,25 @@ class MqttHandler {
       let all = meterProps.every((el) => this.model.hasOwnProperty(el))
 
       if (all) {
-        await Device.findOne({ code: this.deviceCode }).then(async (device) => {
-          return await Meter.create({
-            device: device.id,
-            user: device.user,
-            valveStat: meter.vs,
-            batteryStat: meter.bs,
-            waterUsage: meter.wu,
-            currentTemperature: meter.ct,
-            currentHumidity: meter.ch
-          }).then((meter) => {
-            console.log(`Save Meter Successfully:`, meter)
-            this.model = {}
+        await Device.findOne({ code: this.deviceCode })
+          .then(async (device) => {
+            return await Meter.create({
+              device: device.id,
+              user: device.user,
+              valveStat: this.model.vs,
+              batteryStat: this.model.bs,
+              waterUsage: this.model.wu,
+              currentTemperature: this.model.ct,
+              currentHumidity: this.model.ch
+            }).then((meter) => {
+              console.log(`Save Meter Successfully:`, meter)
+              this.model = {}
+            })
           })
-        })
+          .catch((err) => {
+            console.log(err)
+            throw new AppError(err, 502)
+          })
       }
     })
 

@@ -42,7 +42,7 @@ const getUsers = async (queryString) => {
 }
 
 const getUser = async (userID) => {
-  return await User.findById(userID)
+  return await User.findById(userID).populate('group device')
 }
 
 const updateUser = async (userID, reqBody) => {

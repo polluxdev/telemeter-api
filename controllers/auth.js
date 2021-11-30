@@ -38,6 +38,11 @@ exports.signup = catchAsync(async (req, res, next) => {
 })
 
 exports.login = catchAsync(async (req, res, next) => {
+  const user = await userDb.checkUser('email', req.body.email)
+  if (!user) {
+    throw new AppError(i18n.__('error.email.not_registered'), 422)
+  }
+
   const data = await authDb.login(req.body)
 
   const response = {
