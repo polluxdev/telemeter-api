@@ -1,7 +1,18 @@
+const i18n = require('i18n')
+
+const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
+
 const groupDb = require('../use_cases/group')
 
 exports.createGroup = catchAsync(async (req, res, next) => {
+  if (req.body.regionName) {
+    const group = await groupDb.getGroup(req.body)
+    if (group) {
+      throw new AppError(i18n.__('error.group.already_exists'), 422)
+    }
+  }
+
   req.body.admin = req.user.id
   const data = await groupDb.createGroup(req.body)
 

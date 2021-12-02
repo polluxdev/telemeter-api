@@ -48,8 +48,15 @@ const getGroups = async (queryString) => {
   })
 }
 
-const getGroup = async (groupID) => {
-  return await Group.findById(groupID).populate('admin users')
+const getGroup = async (param) => {
+  const query = Object.create({})
+  if (Object.keys(param).length > 0) {
+    for (const property in param) {
+      query[property] = param[property]
+    }
+  }
+
+  return await Group.findOne(query).populate('admin users')
 }
 
 const updateGroup = async (reqBody) => {
