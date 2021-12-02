@@ -9,7 +9,7 @@ const deviceSeed = async () => {
   const group = await Group.findOne()
   const admin = await User.findOne({ role: 'admin' })
 
-  let name = 'device-seed-dev'
+  let name = 'device-seed'
   const data = await antares.post(
     '/',
     {
