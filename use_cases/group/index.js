@@ -58,12 +58,14 @@ const updateGroup = async (reqBody) => {
   }
 
   if (reqBody.hasOwnProperty('regionCode')) {
+    reqBody.active = false
     return await Group.findOneAndUpdate(
       { regionCode: reqBody.regionCode },
       reqBody
     ).then(async (group) => {
       await User.findByIdAndUpdate(reqBody.user, {
-        group: group.id
+        group: group.id,
+        active: false
       })
 
       return await User.findById(reqBody.user).populate('group')

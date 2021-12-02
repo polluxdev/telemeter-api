@@ -21,7 +21,7 @@ const deviceSeed = async () => {
 
   const code = deviceCode(data.data['m2m:cnt'], 'ri')
 
-  return await Device.create({ name, code })
+  return await Device.create({ name, code, active: true })
 }
 
 module.exports = deviceSeed

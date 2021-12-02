@@ -13,6 +13,7 @@ const createDevice = async (reqBody) => {
   if (reqBody.hasOwnProperty('name')) {
     name = reqBody.name
   }
+  const { admin, group } = reqBody
 
   const data = await antares.post(
     '/',
@@ -30,7 +31,7 @@ const createDevice = async (reqBody) => {
 
   const code = deviceCode(data.data['m2m:cnt'], 'ri')
 
-  return await Device.create({ name, code })
+  return await Device.create({ name, code, admin, group })
 }
 
 const getDevices = async (queryString) => {
@@ -49,9 +50,12 @@ const getDevices = async (queryString) => {
     page: 'currentPage'
   }
 
-  return await Device.paginate(query, { page, limit, customLabels }).then(
-    serialize
-  )
+  return await Device.paginate(query, {
+    populate: 'admin group',
+    page,
+    limit,
+    customLabels
+  })
 }
 
 const getDevice = async (deviceID) => {
