@@ -20,7 +20,7 @@ const updateSeed = async function () {
 }
 
 const seedDB = async () => {
-  mongoose.connection.dropDatabase()
+  await mongoose.connection.dropDatabase()
   await seedDatabase()
   await updateSeed()
 }
