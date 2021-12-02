@@ -1,10 +1,15 @@
 const Device = require('../models/device')
+const Group = require('../models/group')
+const User = require('../models/user')
 
 const antares = require('../../services/antares')
 const { deviceCode } = require('../../services/generator')
 
 const deviceSeed = async () => {
-  let name = 'device-seed'
+  const group = await Group.findOne()
+  const admin = await User.findOne({ role: 'admin' })
+
+  let name = 'device-seed-dev'
   const data = await antares.post(
     '/',
     {
@@ -21,7 +26,13 @@ const deviceSeed = async () => {
 
   const code = deviceCode(data.data['m2m:cnt'], 'ri')
 
-  return await Device.create({ name, code, active: true })
+  return await Device.create({
+    name,
+    code,
+    admin: admin.id,
+    group: group.id,
+    active: true
+  })
 }
 
 module.exports = deviceSeed
