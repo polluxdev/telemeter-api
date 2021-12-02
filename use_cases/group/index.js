@@ -29,6 +29,10 @@ const getGroups = async (queryString) => {
   const query = Object.create({})
   if (Object.keys(fields).length > 0) {
     for (const property in fields) {
+      if (typeof fields[property] != 'boolean') {
+        query[property] = new RegExp(fields[property], 'i')
+        continue
+      }
       query[property] = fields[property]
     }
   }
