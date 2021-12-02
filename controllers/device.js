@@ -4,7 +4,11 @@ const catchAsync = require('../utils/catchAsync')
 const deviceDb = require('../use_cases/device')
 
 exports.createDevice = catchAsync(async (req, res, next) => {
-  const data = await deviceDb.createDevice(req.body)
+  const reqBody = { ...req.body }
+  reqBody.admin = req.user.id
+  reqBody.group = req.user.group
+
+  const data = await deviceDb.createDevice(reqBody)
 
   const response = {
     success: true,
@@ -15,7 +19,10 @@ exports.createDevice = catchAsync(async (req, res, next) => {
 })
 
 exports.getDevices = catchAsync(async (req, res, next) => {
-  const data = await deviceDb.getDevices(req.query)
+  const reqQuery = { ...req.query }
+  reqQuery.group = req.user.group
+
+  const data = await deviceDb.getDevices(reqQuery)
 
   const response = {
     success: true,

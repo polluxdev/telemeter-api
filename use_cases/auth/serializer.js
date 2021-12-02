@@ -6,7 +6,8 @@ const _serializeSingle = (auth) => {
   const response = {
     id: auth._id,
     token,
-    role: auth.role
+    role: auth.role,
+    active: auth.active
   }
 
   if (auth.group) {

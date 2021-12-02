@@ -8,9 +8,9 @@ const deviceUserSeed = require('./deviceUser')
 const groupUserSeed = require('./groupUser')
 
 const seedDatabase = async function () {
-  await deviceSeed()
   await groupSeed()
   await userSeed()
+  await deviceSeed()
 }
 
 const updateSeed = async function () {

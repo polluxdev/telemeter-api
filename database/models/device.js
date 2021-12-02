@@ -17,11 +17,19 @@ const deviceSchema = new Schema(
     },
     active: {
       type: Boolean,
-      default: true
+      default: false
     },
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User'
+    },
+    admin: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    },
+    group: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Group'
     },
     deletedAt: {
       type: Date
