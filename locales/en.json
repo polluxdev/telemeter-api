@@ -60,13 +60,20 @@
 			"used": "Code is already used."
 		},
 		"device": {
-			"not_found_antares": "Device not found in antares data."
+			"not_found_antares": "Device not found in antares data.",
+			"already_exists": "Device already exists."
+		},
+		"group": {
+			"already_exists": "Group already exists."
 		},
 		"validator": {
 			"error": "Validation error.",
 			"device": {
 				"length": "Device name must be at least 2 characters.",
 				"string": "Device name must be string."
+			},
+			"group": {
+				"length": "Group name must be at least 2 characters."
 			},
 			"user": {
 				"name_length": "Name must be at least 2 characters.",

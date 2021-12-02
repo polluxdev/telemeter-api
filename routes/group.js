@@ -2,10 +2,15 @@ const express = require('express')
 
 const groupController = require('../controllers/group')
 const authMiddleware = require('../middlewares/auth')
-// const { deviceValidationRules, validate } = require('../validator/device')
+const { groupValidationRules, validate } = require('../validator/group')
 const router = express.Router()
 
-router.post('/groups', groupController.createGroup)
+router.post(
+  '/groups',
+  groupValidationRules(),
+  validate,
+  groupController.createGroup
+)
 router.get('/groups', groupController.getGroups)
 router.get('/groups/:id', groupController.getGroup)
 router.patch('/groups', groupController.updateGroup)

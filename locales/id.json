@@ -60,13 +60,20 @@
 			"used": "Kode sudah dipakai."
 		},
 		"device": {
-			"not_found_antares": "Perangkat tidak ditemukan di data antares."
+			"not_found_antares": "Perangkat tidak ditemukan di data antares.",
+			"already_exists": "Perangkat sudah terdaftar."
+		},
+		"group": {
+			"already_exists": "Group sudah terdaftar."
 		},
 		"validator": {
 			"error": "Kesalahan validasi.",
 			"device": {
 				"length": "Nama perangkat minimal harus 2 karakter.",
 				"string": "Nama perangkat harus berupa string."
+			},
+			"group": {
+				"length": "Nama kelompok minimal harus 2 karakter."
 			},
 			"user": {
 				"name_length": "Nama harus minimal 2 karakter.",
