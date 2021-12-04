@@ -8,7 +8,9 @@ const deviceDb = require('../use_cases/device')
 exports.createDevice = catchAsync(async (req, res, next) => {
   const reqBody = { ...req.body }
   reqBody.admin = req.user.id
-  reqBody.group = req.user.group.id
+  if (req.user.group) {
+    reqBody.group = req.user.group.id
+  }
 
   if (req.body.name) {
     const device = await deviceDb.getDevice(req.body)
