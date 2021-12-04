@@ -58,31 +58,50 @@ const getDevices = async (queryString) => {
   })
 }
 
-const getDevice = async (param) => {
-  const query = Object.create({})
-  if (Object.keys(param).length > 0) {
-    for (const property in param) {
-      query[property] = param[property]
+const getDevice = async (deviceID) => {
+  if (deviceID.hasOwnProperty('name')) {
+    const param = deviceID
+    const query = Object.create({})
+    if (Object.keys(param).length > 0) {
+      for (const property in param) {
+        query[property] = param[property]
+      }
     }
+
+    return await Device.findOne(query)
+      .populate('admin group')
+      .then(async (device) => {
+        if (device) {
+          await antares
+            .get(`/${device.name}`, {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .catch(() => {
+              throw new AppError(i18n.__('error.device.not_found_antares'), 422)
+            })
+        }
+
+        return device
+      })
   }
 
-  return await Device.findOne(query)
-    .populate('admin group')
-    .then(async (device) => {
-      if (device) {
-        await antares
-          .get(`/${device.name}`, {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
-          .catch(() => {
-            throw new AppError(i18n.__('error.device.not_found_antares'), 422)
-          })
-      }
+  return await Device.findById(deviceID).then(async (device) => {
+    if (device) {
+      await antares
+        .get(`/${device.name}`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .catch(() => {
+          throw new AppError(i18n.__('error.device.not_found_antares'), 422)
+        })
+    }
 
-      return device
-    })
+    return device
+  })
 }
 
 const updateDevice = async (deviceID, reqBody) => {

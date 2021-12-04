@@ -29,11 +29,16 @@ const getGroups = async (queryString) => {
   const query = Object.create({})
   if (Object.keys(fields).length > 0) {
     for (const property in fields) {
-      if (typeof fields[property] != 'boolean') {
-        query[property] = new RegExp(fields[property], 'i')
+      if (
+        fields[property] == true ||
+        fields[property] == false ||
+        fields[property] == 'true' ||
+        fields[property] == 'false'
+      ) {
+        query[property] = fields[property]
         continue
       }
-      query[property] = fields[property]
+      query[property] = new RegExp(fields[property], 'i')
     }
   }
 
@@ -52,15 +57,20 @@ const getGroups = async (queryString) => {
   })
 }
 
-const getGroup = async (param) => {
-  const query = Object.create({})
-  if (Object.keys(param).length > 0) {
-    for (const property in param) {
-      query[property] = param[property]
+const getGroup = async (groupID) => {
+  if (groupID.hasOwnProperty('regionName')) {
+    const param = groupID
+    const query = Object.create({})
+    if (Object.keys(param).length > 0) {
+      for (const property in param) {
+        query[property] = param[property]
+      }
     }
+
+    return await Group.findOne(query).populate('admin users')
   }
 
-  return await Group.findOne(query).populate('admin users')
+  return await Group.findById(groupID).populate('admin users')
 }
 
 const updateGroup = async (reqBody) => {
