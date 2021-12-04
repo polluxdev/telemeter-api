@@ -29,7 +29,9 @@ exports.createDevice = catchAsync(async (req, res, next) => {
 
 exports.getDevices = catchAsync(async (req, res, next) => {
   const reqQuery = { ...req.query }
-  reqQuery.group = req.user.group.id
+  if (req.user.group) {
+    reqQuery.group = req.user.group.id
+  }
 
   const data = await deviceDb.getDevices(reqQuery)
 
