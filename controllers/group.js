@@ -25,10 +25,6 @@ exports.createGroup = catchAsync(async (req, res, next) => {
 })
 
 exports.getGroups = catchAsync(async (req, res, next) => {
-  if (!req.query.active) {
-    req.query.active = true
-  }
-
   const data = await groupDb.getGroups(req.query)
 
   const response = {
