@@ -3,7 +3,9 @@ const dashboardDb = require('../use_cases/dashboard')
 
 exports.getUsersCount = catchAsync(async (req, res, next) => {
   const query = { ...req.query }
-  query.group = req.user.group._id
+  if (req.user.group) {
+    query.group = req.user.group._id
+  }
   const count = await dashboardDb.getUsersCount(query)
 
   const response = {
@@ -29,7 +31,9 @@ exports.getMeterTotal = catchAsync(async (req, res, next) => {
 
 exports.getTopUsage = catchAsync(async (req, res, next) => {
   const query = { ...req.query }
-  query.group = req.user.group._id
+  if (req.user.group) {
+    query.group = req.user.group._id
+  }
   const data = await dashboardDb.getTopUsage(query)
 
   const response = {
@@ -42,7 +46,9 @@ exports.getTopUsage = catchAsync(async (req, res, next) => {
 
 exports.getTrafficUsage = catchAsync(async (req, res, next) => {
   const query = { ...req.query }
-  query.group = req.user.group._id
+  if (req.user.group) {
+    query.group = req.user.group._id
+  }
   const data = await dashboardDb.getTrafficUsage(query)
 
   const response = {
