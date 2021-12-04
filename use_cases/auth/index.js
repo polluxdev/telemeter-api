@@ -20,8 +20,23 @@ const login = async (reqBody) => {
     .select('+password')
     .populate('group device')
     .then(async (user) => {
-      if (!user || !(await user.correctPassword(password, user.password))) {
+      if (
+        user.hasOwnProperty('password') &&
+        !(await user.correctPassword(password, user.password))
+      ) {
         throw new AppError(i18n.__('error.auth.wrong_email_password'), 401)
+      }
+      if (user.confirmationCode) {
+        return await User.findByIdAndUpdate(
+          user.id,
+          {
+            $unset: { confirmationCode: 1 }
+          },
+          {
+            new: true,
+            runValidators: true
+          }
+        )
       }
 
       return user

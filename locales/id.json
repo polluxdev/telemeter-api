@@ -57,7 +57,7 @@
 			"not_exists": "Pengguna sudah tidak terdaftar."
 		},
 		"code": {
-			"used": "Kode sudah dipakai."
+			"used": "Kode konfirmasi tidak valid."
 		},
 		"device": {
 			"not_found_antares": "Perangkat tidak ditemukan di data antares.",
