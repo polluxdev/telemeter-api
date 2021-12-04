@@ -1,3 +1,4 @@
+const i18n = require('i18n')
 const nodemailer = require('nodemailer')
 
 const config = require('../config')
@@ -16,31 +17,43 @@ const setEmailVerification = (reqBody) => {
   const mailData = {
     from: config.APP_NAME,
     to: reqBody.email,
-    subject: 'Verification Email',
+    subject: 'Verification Code',
     text: 'That was easy!',
     html: `<b>Hey there! </b>
-         <br> This is our first message sent with Nodemailer<br/>
+         <br>This is your confirmation code<br/>
          <b>${reqBody.confirmationCode}</b>`
   }
 
-  return transporter.sendMail(mailData)
+  return mailData
 }
 
 const setEmailForgotPassword = (reqBody) => {
   const mailData = {
     from: config.APP_NAME,
     to: reqBody.email,
-    subject: 'Reset Password Email',
+    subject: 'Verification Code',
     text: 'That was easy!',
     html: `<b>Hey there! </b>
-         <br> This is our first message sent with Nodemailer<br/>
+         <br>This is your confirmation code<br/>
          <b>${reqBody.confirmationCode}</b>`
   }
 
-  return transporter.sendMail(mailData)
+  return mailData
+}
+
+const sendEmail = async (setEmail) => {
+  await transporter.sendMail(setEmail)
+
+  const response = {
+    success: true,
+    message: i18n.__('success.email.send_success')
+  }
+
+  return response
 }
 
 module.exports = {
   setEmailVerification,
-  setEmailForgotPassword
+  setEmailForgotPassword,
+  sendEmail
 }

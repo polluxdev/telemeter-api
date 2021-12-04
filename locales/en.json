@@ -57,7 +57,7 @@
 			"not_exists": "User does no longer exists."
 		},
 		"code": {
-			"used": "Code is already used."
+			"used": "Confirmation code is invalid."
 		},
 		"device": {
 			"not_found_antares": "Device not found in antares data.",

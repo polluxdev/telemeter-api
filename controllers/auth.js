@@ -6,7 +6,11 @@ const catchAsync = require('../utils/catchAsync')
 const authDb = require('../use_cases/auth')
 const userDb = require('../use_cases/user')
 
-const email = require('../services/mail')
+const {
+  sendEmail,
+  setEmailVerification,
+  setEmailForgotPassword
+} = require('../services/mail')
 const authService = require('../services/auth')
 const { randomString } = require('../services/generator')
 
@@ -23,27 +27,46 @@ exports.signup = catchAsync(async (req, res, next) => {
     console.log(err)
     throw new AppError(i18n.__('error.auth.sign_up_failed'), 502)
   })
-  await email.setEmailVerification(reqBody).catch((err) => {
-    console.log(err)
-    throw new AppError(i18n.__('error.email.send_failed'), 502)
-  })
+  const mailResponse = await sendEmail(setEmailVerification(reqBody)).catch(
+    (err) => {
+      console.log(err)
+      throw new AppError(i18n.__('error.email.send_failed'), 502)
+    }
+  )
 
-  const response = {
-    success: true,
-    message: i18n.__('success.email.send_success'),
-    data
-  }
+  const response = Object.assign(
+    { success: true, message: i18n.__('success.email.send_success'), data },
+    mailResponse
+  )
 
   res.status(201).json(response)
 })
 
 exports.login = catchAsync(async (req, res, next) => {
-  const user = await userDb.checkUser('email', req.body.email)
+  const reqBody = { ...req.body }
+  const user = await userDb.checkUser('email', reqBody.email)
   if (!user) {
     throw new AppError(i18n.__('error.email.not_registered'), 422)
   }
 
-  const data = await authDb.login(req.body)
+  if (!user.name) {
+    reqBody.confirmationCode = randomString(3)
+    const data = await userDb.updateUser(user.id, reqBody).then(() => {
+      return authDb.forgotPassword(reqBody)
+    })
+
+    const mailResponse = await sendEmail(setEmailVerification(reqBody))
+
+    const response = Object.assign(
+      { success: true, message: i18n.__('success.email.send_success'), data },
+      mailResponse
+    )
+
+    res.status(200).json(response)
+    return
+  }
+
+  const data = await authDb.login(reqBody)
 
   const response = {
     success: true,
@@ -97,16 +120,17 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const data = await userDb.updateUser(user.id, reqBody).then(() => {
     return authDb.forgotPassword(reqBody)
   })
-  await email.setEmailForgotPassword(reqBody).catch((err) => {
-    console.log(err)
-    throw new AppError(i18n.__('error.email.send_failed'), 502)
-  })
+  const mailResponse = await sendEmail(setEmailForgotPassword(reqBody)).catch(
+    (err) => {
+      console.log(err)
+      throw new AppError(i18n.__('error.email.send_failed'), 502)
+    }
+  )
 
-  const response = {
-    success: true,
-    message: i18n.__('success.email.send_success'),
-    data
-  }
+  const response = Object.assign(
+    { success: true, message: i18n.__('success.email.send_success'), data },
+    mailResponse
+  )
 
   res.status(201).json(response)
 })
@@ -154,9 +178,9 @@ exports.validateCode = catchAsync(async (req, res, next) => {
 })
 
 exports.sendCode = catchAsync(async (req, res, next) => {
-  const reqBody = req.body
-  
-  const user = await userDb.checkUser('email', req.body.email)
+  const reqBody = { ...req.body }
+
+  const user = await userDb.checkUser('email', reqBody.email)
   if (!user) {
     throw new AppError(i18n.__('error.user.not_found'), 422)
   }
@@ -165,16 +189,17 @@ exports.sendCode = catchAsync(async (req, res, next) => {
   const data = await userDb.updateUser(user.id, reqBody).then(() => {
     return authDb.forgotPassword(reqBody)
   })
-  await email.setEmailForgotPassword(reqBody).catch((err) => {
-    console.log(err)
-    throw new AppError(i18n.__('error.email.send_failed'), 502)
-  })
+  const mailResponse = await sendEmail(setEmailForgotPassword(reqBody)).catch(
+    (err) => {
+      console.log(err)
+      throw new AppError(i18n.__('error.email.send_failed'), 502)
+    }
+  )
 
-  const response = {
-    success: true,
-    message: i18n.__('success.email.send_success'),
-    data
-  }
+  const response = Object.assign(
+    { success: true, message: i18n.__('success.email.send_success'), data },
+    mailResponse
+  )
 
   res.status(201).json(response)
 })
