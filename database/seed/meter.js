@@ -1,4 +1,3 @@
-const Device = require('../models/device')
 const Meter = require('../models/meter')
 const User = require('../models/user')
 
@@ -6,25 +5,28 @@ const vs = ['ON', 'OFF']
 const bs = ['OK', 'ERR']
 
 const meterSeed = async () => {
-  const device = await Device.findOne()
-  const user = await User.findOne({ role: 'user' })
+  const users = await User.find({ role: 'user' })
 
   const meters = []
 
-  let n = 0
+  let i = 0
+  while (i < users.length) {
+    let j = 0
+    while (j < 1000) {
+      meters.push({
+        device: users[i].device,
+        user: users[i].id,
+        valveStat: getRandomStat(vs),
+        batteryStat: getRandomStat(bs),
+        waterUsage: getRandomInt(100),
+        currentTemperature: getRandomInt(30),
+        currentHumidity: getRandomInt(100)
+      })
 
-  while (n < 20) {
-    meters.push({
-      device: device.id,
-      user: user.id,
-      valveStat: getRandomStat(vs),
-      batteryStat: getRandomStat(bs),
-      waterUsage: getRandomInt(100),
-      currentTemperature: getRandomInt(30),
-      currentHumidity: getRandomInt(100)
-    })
+      j++
+    }
 
-    n++
+    i++
   }
 
   return await Meter.insertMany(meters)

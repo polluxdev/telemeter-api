@@ -1,5 +1,4 @@
 const Device = require('../models/device')
-const Group = require('../models/group')
 const User = require('../models/user')
 
 const antares = require('../../services/antares')
@@ -7,33 +6,41 @@ const { deviceCode } = require('../../services/generator')
 const uuid = require('../../services/uuid')
 
 const deviceSeed = async () => {
-  const group = await Group.findOne()
-  const admin = await User.findOne({ role: 'admin' })
+  const admins = await User.find({ role: 'admin' })
 
-  let name = uuid()
-  const data = await antares.post(
-    '/',
-    {
-      'm2m:cnt': {
-        rn: name
+  const devices = []
+
+  let n = 0
+  while (n < admins.length) {
+    let name = uuid()
+    const data = await antares.post(
+      '/',
+      {
+        'm2m:cnt': {
+          rn: name
+        }
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json;ty=3'
+        }
       }
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json;ty=3'
-      }
-    }
-  )
+    )
 
-  const code = deviceCode(data.data['m2m:cnt'], 'ri')
+    const code = deviceCode(data.data['m2m:cnt'], 'ri')
 
-  return await Device.create({
-    name,
-    code,
-    admin: admin.id,
-    group: group.id,
-    active: true
-  })
+    devices.push({
+      name,
+      code,
+      admin: admins[n].id,
+      group: admins[n].group,
+      active: true
+    })
+
+    n++
+  }
+
+  return await Device.insertMany(devices)
 }
 
 module.exports = deviceSeed

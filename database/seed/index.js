@@ -10,12 +10,12 @@ const groupUserSeed = require('./groupUser')
 const seedDatabase = async function () {
   await groupSeed()
   await userSeed()
-  await deviceSeed()
 }
 
 const updateSeed = async function () {
-  await deviceUserSeed()
   await groupUserSeed()
+  await deviceSeed()
+  await deviceUserSeed()
   await meterSeed()
 }
 
