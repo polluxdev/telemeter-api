@@ -18,7 +18,9 @@ exports.getUsersCount = catchAsync(async (req, res, next) => {
 
 exports.getMeterTotal = catchAsync(async (req, res, next) => {
   const query = { ...req.query }
-  query.group = req.user.group._id
+  if (req.user.group) {
+    query.group = req.user.group._id
+  }
   const data = await dashboardDb.getMeterTotal(query)
 
   const response = {

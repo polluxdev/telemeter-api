@@ -4,12 +4,13 @@ const User = require('../models/user')
 
 const antares = require('../../services/antares')
 const { deviceCode } = require('../../services/generator')
+const uuid = require('../../services/uuid')
 
 const deviceSeed = async () => {
   const group = await Group.findOne()
   const admin = await User.findOne({ role: 'admin' })
 
-  let name = 'device-seed'
+  let name = uuid()
   const data = await antares.post(
     '/',
     {

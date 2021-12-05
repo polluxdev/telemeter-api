@@ -7,6 +7,7 @@ const { deviceCode } = require('../../services/generator')
 const Device = require('../../database/models/device')
 const serialize = require('./serializer')
 const AppError = require('../../utils/appError')
+const config = require('../../config')
 
 const createDevice = async (reqBody) => {
   let name = uuid()
@@ -35,7 +36,7 @@ const createDevice = async (reqBody) => {
 }
 
 const getDevices = async (queryString) => {
-  const { page = 1, limit = 5, ...fields } = queryString
+  const { page = 1, limit = config.query.QUERY_LIMIT, ...fields } = queryString
   const query = Object.create({})
   if (Object.keys(fields).length > 0) {
     for (const property in fields) {

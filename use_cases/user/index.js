@@ -1,7 +1,8 @@
 const User = require('../../database/models/user')
 const deviceDb = require('../device/index')
 const groupDb = require('../group/index')
-const { serialize } = require('./serializer')
+
+const config = require('../../config')
 
 const addUser = async (reqBody) => {
   const newUser = {
@@ -18,7 +19,7 @@ const addUser = async (reqBody) => {
 }
 
 const getUsers = async (queryString) => {
-  const { page = 1, limit = 5, ...fields } = queryString
+  const { page = 1, limit = config.query.QUERY_LIMIT, ...fields } = queryString
   const query = Object.create({})
   if (Object.keys(fields).length > 0) {
     for (const property in fields) {
