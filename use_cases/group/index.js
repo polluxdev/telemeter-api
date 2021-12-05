@@ -1,7 +1,8 @@
 const Group = require('../../database/models/group')
 const User = require('../../database/models/user')
-const serialize = require('./serializer')
+
 const { randomString } = require('../../services/generator')
+const config = require('../../config')
 
 const createGroup = async (reqBody) => {
   const code = randomString(3)
@@ -25,7 +26,7 @@ const createGroup = async (reqBody) => {
 }
 
 const getGroups = async (queryString) => {
-  const { page = 1, limit = 5, ...fields } = queryString
+  const { page = 1, limit = config.query.QUERY_LIMIT, ...fields } = queryString
   const query = Object.create({})
   if (Object.keys(fields).length > 0) {
     for (const property in fields) {

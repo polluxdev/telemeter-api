@@ -35,5 +35,8 @@ module.exports = {
     MAIL_PORT: process.env.MAIL_PORT,
     MAIL_USER: process.env.MAIL_USER,
     MAIL_PASSWORD: process.env.MAIL_PASSWORD
+  },
+  query: {
+    QUERY_LIMIT: process.env.QUERY_LIMIT
   }
 }

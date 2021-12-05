@@ -1,7 +1,9 @@
 const Meter = require('../../database/models/meter')
 
+const config = require('../../config')
+
 const getMeters = async (queryString) => {
-  const { page = 1, limit = 5, ...fields } = queryString
+  const { page = 1, limit = config.query.QUERY_LIMIT, ...fields } = queryString
   const query = Object.create({})
   if (Object.keys(fields).length > 0) {
     for (const property in fields) {
