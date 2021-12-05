@@ -80,7 +80,6 @@ const updateGroup = async (reqBody) => {
   }
 
   if (reqBody.hasOwnProperty('regionCode')) {
-    reqBody.active = false
     return await Group.findOneAndUpdate(
       { regionCode: reqBody.regionCode },
       reqBody
