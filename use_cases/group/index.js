@@ -120,10 +120,28 @@ const deleteGroup = async (groupID) => {
   )
 }
 
+const insertUser = async (groupId, reqBody) => {
+  const { ...user } = reqBody
+  const param = { $push: {} }
+  if (Object.keys(user).length > 0) {
+    for (const property in user) {
+      Object.assign(param['$push'], { [property]: user[property] })
+    }
+  }
+
+  return await Group.findByIdAndUpdate(groupId, param, {
+    new: true,
+    runValidators: true
+  }).then(async (group) => {
+    return await Group.findById(group._id)
+  })
+}
+
 module.exports = {
   createGroup,
   getGroups,
   getGroup,
   updateGroup,
-  deleteGroup
+  deleteGroup,
+  insertUser
 }

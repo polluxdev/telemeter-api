@@ -72,3 +72,15 @@ exports.deleteGroup = catchAsync(async (req, res, next) => {
 
   res.status(200).json(response)
 })
+
+exports.insertUser = catchAsync(async (req, res, next) => {
+  const data = await groupDb.insertUser(req.params.id, req.body)
+
+  const response = {
+    success: true,
+    message: 'Insert data successfully',
+    data
+  }
+
+  res.status(201).json(response)
+})

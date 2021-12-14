@@ -14,6 +14,11 @@ router.post(
 router.get('/groups', groupController.getGroups)
 router.get('/groups/:id', groupController.getGroup)
 router.patch('/groups', groupController.updateGroup)
+router.patch(
+  '/groups/user/:id',
+  authMiddleware.restrictTo('user'),
+  groupController.insertUser
+)
 router.delete(
   '/groups/:id',
   authMiddleware.restrictTo('user'),
