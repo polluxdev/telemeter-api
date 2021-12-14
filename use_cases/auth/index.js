@@ -21,7 +21,7 @@ const login = async (reqBody) => {
     .populate('group device')
     .then(async (user) => {
       if (
-        user.hasOwnProperty('password') &&
+        user &&
         !(await user.correctPassword(password, user.password))
       ) {
         throw new AppError(i18n.__('error.auth.wrong_email_password'), 401)
